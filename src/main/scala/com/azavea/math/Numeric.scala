@@ -13,7 +13,7 @@ import scala.math.{abs, min, max, pow}
  * Importantly, this package does not deliver classes for you to instantiate. Rather,
  * it gives you a trait to associated with your generic types, which allows actual
  * uses of your generic code with concrete types (e.g. Int) to link up with concrete
- * implementations (e.g. NumericInt) of Numeric's method for that type.
+ * implementations (e.g. IntIsNumeric) of Numeric's method for that type.
  *
  * @example {{{
  *   import demo.Numeric
@@ -203,9 +203,18 @@ trait Numeric[@specialized A] extends ConvertableFrom[A] with ConvertableTo[A] {
    * @return the value of `b` encoded in type `A`
    */
   def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]): A
+
+  /**
+   * Used to get an Ordering[A] instance.
+   */
+  def getOrdering():Ordering[A] = new NumericOrdering(this)
 }
 
-trait NumericInt extends Numeric[Int] with ConvertableFromInt with ConvertableToInt {
+class NumericOrdering[A](n:Numeric[A]) extends Ordering[A] {
+  def compare(a:A, b:A) = n.compare(a, b)
+}
+
+trait IntIsNumeric extends Numeric[Int] with ConvertableFromInt with ConvertableToInt {
   def abs(a:Int): Int = scala.math.abs(a)
   def div(a:Int, b:Int): Int = a / b
   def equiv(a:Int, b:Int): Boolean = a == b
@@ -227,7 +236,7 @@ trait NumericInt extends Numeric[Int] with ConvertableFromInt with ConvertableTo
   def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toInt(b)
 }
 
-trait NumericLong extends Numeric[Long] with ConvertableFromLong with ConvertableToLong {
+trait LongIsNumeric extends Numeric[Long] with ConvertableFromLong with ConvertableToLong {
   def abs(a:Long): Long = scala.math.abs(a)
   def div(a:Long, b:Long): Long = a / b
   def equiv(a:Long, b:Long): Boolean = a == b
@@ -249,7 +258,7 @@ trait NumericLong extends Numeric[Long] with ConvertableFromLong with Convertabl
   def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toLong(b)
 }
 
-trait NumericFloat extends Numeric[Float] with ConvertableFromFloat with ConvertableToFloat {
+trait FloatIsNumeric extends Numeric[Float] with ConvertableFromFloat with ConvertableToFloat {
   def abs(a:Float): Float = scala.math.abs(a)
   def div(a:Float, b:Float): Float = a / b
   def equiv(a:Float, b:Float): Boolean = a == b
@@ -271,7 +280,7 @@ trait NumericFloat extends Numeric[Float] with ConvertableFromFloat with Convert
   def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toFloat(b)
 }
 
-trait NumericDouble extends Numeric[Double] with ConvertableFromDouble with ConvertableToDouble {
+trait DoubleIsNumeric extends Numeric[Double] with ConvertableFromDouble with ConvertableToDouble {
   def abs(a:Double): Double = scala.math.abs(a)
   def div(a:Double, b:Double): Double = a / b
   def equiv(a:Double, b:Double): Boolean = a == b
@@ -298,8 +307,8 @@ object Numeric {
 
   def numeric[@specialized A:Numeric]() = implicitly[Numeric[A]]
 
-  implicit object NumericInt extends NumericInt
-  implicit object NumericLong extends NumericLong
-  implicit object NumericFloat extends NumericFloat
-  implicit object NumericDouble extends NumericDouble
+  implicit object IntIsNumeric extends IntIsNumeric
+  implicit object LongIsNumeric extends LongIsNumeric
+  implicit object FloatIsNumeric extends FloatIsNumeric
+  implicit object DoubleIsNumeric extends DoubleIsNumeric
 }
