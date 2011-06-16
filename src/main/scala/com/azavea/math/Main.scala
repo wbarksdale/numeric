@@ -642,32 +642,41 @@ trait Quicksort extends BaseSort {
   def directFloatSorter(a:Array[Float]) = { val d = a.clone; scala.util.Sorting.quickSort(d); d }
   def directDoubleSorter(a:Array[Double]) = { val d = a.clone; scala.util.Sorting.quickSort(d); d }
 
-  def newGeneric() = None
-  def newGenericSorter[@specialized A:Numeric:Manifest](a:Array[A]) = null
+  //def newGenericSorter[@specialized A:Numeric:Manifest](a:Array[A]) = null
+  def newGenericSorter[@specialized A:Numeric:Manifest](a:Array[A]) = {
+    val d = a.clone;
+    implicit val ord = implicitly[Numeric[A]].getOrdering()
+    scala.util.Sorting.quickSort(d);
+    d
+  }
   def oldGenericSorter[A:OldNumeric:Manifest](a:Array[A]) = { val d = a.clone; scala.util.Sorting.quickSort(d); d }
 }
 
 class QuicksortInt extends Quicksort {
   def name = "quicksort-int"
   def direct() = directInt(mediumIntArray)
+  def newGeneric() = newGenericSort(mediumIntArray)
   def oldGeneric() = oldGenericSort(mediumIntArray)
 }
 
 class QuicksortLong extends Quicksort {
   def name = "quicksort-long"
   def direct() = directLong(mediumLongArray)
+  def newGeneric() = newGenericSort(mediumLongArray)
   def oldGeneric() = oldGenericSort(mediumLongArray)
 }
 
 class QuicksortFloat extends Quicksort {
   def name = "quicksort-float"
   def direct() = directFloat(mediumFloatArray)
+  def newGeneric() = newGenericSort(mediumFloatArray)
   def oldGeneric() = oldGenericSort(mediumFloatArray)
 }
 
 class QuicksortDouble extends Quicksort {
   def name = "quicksort-double"
   def direct() = directDouble(mediumDoubleArray)
+  def newGeneric() = newGenericSort(mediumDoubleArray)
   def oldGeneric() = oldGenericSort(mediumDoubleArray)
 }
 
@@ -1069,84 +1078,84 @@ trait MergeSort extends BaseSort {
 
 class MergeSortInt extends MergeSort {
   def name = "merge-sort-int"
-  def direct() = directInt(mediumIntArray)
-  def newGeneric() = newGenericSort(mediumIntArray)
-  def oldGeneric() = oldGenericSort(mediumIntArray)
+  def direct() = { val a = mediumIntArray.clone; directInt(a); Some(a) }
+  def newGeneric() = { val a = mediumIntArray.clone; newGenericSort(a); Some(a) }
+  def oldGeneric() = { val a = mediumIntArray.clone; oldGenericSort(a); Some(a) }
 }
 
 class MergeSortLong extends MergeSort {
   def name = "merge-sort-long"
-  def direct() = directLong(mediumLongArray)
-  def newGeneric() = newGenericSort(mediumLongArray)
-  def oldGeneric() = oldGenericSort(mediumLongArray)
+  def direct() = { val a = mediumLongArray.clone; directLong(a); Some(a) }
+  def newGeneric() = { val a = mediumLongArray; newGenericSort(a); Some(a) }
+  def oldGeneric() = { val a = mediumLongArray; oldGenericSort(a); Some(a) }
 }
 
 class MergeSortFloat extends MergeSort {
   def name = "merge-sort-float"
-  def direct() = directFloat(mediumFloatArray)
-  def newGeneric() = newGenericSort(mediumFloatArray)
-  def oldGeneric() = oldGenericSort(mediumFloatArray)
+  def direct() = { val a = mediumFloatArray; directFloat(a); Some(a) }
+  def newGeneric() = { val a = mediumFloatArray; newGenericSort(a); Some(a) }
+  def oldGeneric() = { val a = mediumFloatArray; oldGenericSort(a); Some(a) }
 }
 
 class MergeSortDouble extends MergeSort {
   def name = "merge-sort-double"
-  def direct() = directDouble(mediumDoubleArray)
-  def newGeneric() = newGenericSort(mediumDoubleArray)
-  def oldGeneric() = oldGenericSort(mediumDoubleArray)
+  def direct() = { val a = mediumDoubleArray; directDouble(a); Some(a) }
+  def newGeneric() = { val a = mediumDoubleArray; newGenericSort(a); Some(a) }
+  def oldGeneric() = { val a = mediumDoubleArray; oldGenericSort(a); Some(a) }
 }
 
 
 object Main {
   val tests = List(List(new FromIntToInt,
-                   new FromIntToLong,
-                   new FromIntToFloat,
-                   new FromIntToDouble),
-
+                        new FromIntToLong,
+                        new FromIntToFloat,
+                        new FromIntToDouble),
+                   
                    List(new AdderInt,
-                   new AdderLong,
-                   new AdderFloat,
-                   new AdderDouble),
+                        new AdderLong,
+                        new AdderFloat,
+                        new AdderDouble),
                    
                    List(new IntArrayAdder,
-                   new LongArrayAdder,
-                   new FloatArrayAdder,
-                   new DoubleArrayAdder),
+                        new LongArrayAdder,
+                        new FloatArrayAdder,
+                        new DoubleArrayAdder),
                    
                    List(new IntArrayRescale,
-                   new LongArrayRescale,
-                   new FloatArrayRescale,
-                   new DoubleArrayRescale),
-
+                        new LongArrayRescale,
+                        new FloatArrayRescale,
+                        new DoubleArrayRescale),
+                   
                    List(new FindMaxInt,
-                   new FindMaxLong,
-                   new FindMaxFloat,
-                   new FindMaxDouble),
-
+                        new FindMaxLong,
+                        new FindMaxFloat,
+                        new FindMaxDouble),
+                   
                    List(new QuicksortInt,
-                   new QuicksortLong,
-                   new QuicksortFloat,
-                   new QuicksortDouble),
-
+                        new QuicksortLong,
+                        new QuicksortFloat,
+                        new QuicksortDouble),
+                   
                    List(new ArrayAllocatorInt,
-                   new ArrayAllocatorLong,
-                   new ArrayAllocatorFloat,
-                   new ArrayAllocatorDouble),
-
+                        new ArrayAllocatorLong,
+                        new ArrayAllocatorFloat,
+                        new ArrayAllocatorDouble),
+                   
                    List(new InsertionSortInt,
-                   new InsertionSortLong,
-                   new InsertionSortFloat,
-                   new InsertionSortDouble),
-
+                        new InsertionSortLong,
+                        new InsertionSortFloat,
+                        new InsertionSortDouble),
+                   
                    List(new MergeSortInt,
-                   new MergeSortLong,
-                   new MergeSortFloat,
-                   new MergeSortDouble),
-
+                        new MergeSortLong,
+                        new MergeSortFloat,
+                        new MergeSortDouble),
+                   
                    List(new InfixAdderInt,
-                   new InfixAdderLong,
-                   new InfixAdderFloat,
-                   new InfixAdderDouble))
-
+                        new InfixAdderLong,
+                        new InfixAdderFloat,
+                        new InfixAdderDouble))
+  
   def getHTMLHeader() = """
 <html>
  <head>
@@ -1154,11 +1163,9 @@ object Main {
     td { text-align: right; padding: 4px; }
     td { border: 1px solid black; padding: 4px; }
     thead { background-color: lightgrey; }
-
     .na { border: 0px; }
     .base { border: 0px; }
     .sep { border: 0px; colspan="6" }
-
     .name { background-color: lightgrey; }
     .great { background-color: #99ccff; }
     .good { background-color: #99ff99; }
