@@ -1,16 +1,18 @@
 This is a package I've built to show some basic improvements in speed we can
-get with a specialized Numeric trait. I hope to release this as an
-independent jar that people can plug in to do fast generic math, and
-eventually I hope to get code like this integrated into the core Scala
-library.
+get with a better Numeric trait. It features specialization among other
+improvements and it can be used productively right now. 
+
+Soon I hope to release this as an independent jar that people can plug in to
+do fast generic math, and eventually I hope to get code like this integrated
+into the core Scala library.
 
 === BENCHMARKS ===
 
 You can run the performance tests with "sbt run".
 
 The output shows the speed (in ms) of a direct implementation (without
-generics), a new implementation (using my own Numeric) and an old
-implementation (using the built-in scala.math.Numeric).
+generics), the new implementation (com.azavea.math.Numeric) and the old
+implementation (the built-in scala.math.Numeric).
 
   n:d is how new compares to direct
   o:d is how old compares to direct
