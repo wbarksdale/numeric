@@ -1,0 +1,50 @@
+This is a random list of things that either would be good to do, or would be
+good to consider doing. Some of these are mutually-incompatible (or at least,
+mutually-undesirable).
+
+1. Use +. instead of (or in addition to) +
+
+This would make it possible to "pimp" literal numbers into the appropriate
+Numeric type using implicits (e.g. a +. 3, or 3 +. a). There are some gotchas:
+
+  a. Things like a + 3.0 might not work as expected (you'd get back a T, which
+     might be an Int). There would need to be warnings (if you want promotion
+     to happen, do it explicitly, e.g. a.toDouble + 3.0).
+
+  b. Operator precedence might not work well. There would need to be warnings
+     about this (e.g. a +: b *: c +: d).
+
+2. Add things like: add(T, Int), add(Int, T), add(T, Long), etc.
+
+If you don't like #1, this is another way to make working with literals a lot
+nicer. But there are some problems:
+
+  a. If you are doing something like "T + Float" you can't be sure if the
+     result should be T, Float, or something else.
+
+  b. It's a lot of boilerplate.
+
+  c. It wouldn't behave reliably with infix operators
+     (e.g. a + 3 would work, 3 + a would not)
+
+3. Create implicit conversions using toNumeric[T]
+
+This would allow someone to say 3.toNumeric[T] rather than having to get a
+reference to the Numeric instance and say n.fromInt(3).
+
+4. Specialize Ordering
+
+This is probably too big for this project, but it would be great if Ordering
+were specialized so that Numeric could extend it without taking a huge speed
+hit on things like Numeric.lt().
+
+5. Rationalize working with two different numeric types
+
+Currently if you have "def complicated[T:Numeric, U:Numeric](t:T, u:U)" you
+will have to do manual conversions to one of those types without being sure
+that you aren't losing precision. I'm not sure there's a way to get around
+this, but it might be nice to have a way to compare two Numeric objects in
+terms of which one should "win" in terms of precision. That way you could at
+least say something like "if (n1.morePreciseThan(n2)) ... else ..."
+
+I'm not sure how often this would be used, but I could imagine it being nice.
