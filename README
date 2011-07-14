@@ -6,9 +6,13 @@ Soon I hope to release this as an independent jar that people can plug in to
 do fast generic math, and eventually I hope to get code like this integrated
 into the core Scala library.
 
+=== DEPENDENCIES ===
+
+This package only depends on sbt 0.10.x.
+
 === BENCHMARKS ===
 
-You can run the performance tests with "sbt run".
+You can run the performance tests with "sbt run" (using sbt 10).
 
 The output shows the speed (in ms) of a direct implementation (without
 generics), the new implementation (com.azavea.math.Numeric) and the old

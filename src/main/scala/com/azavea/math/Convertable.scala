@@ -1,13 +1,25 @@
 package com.azavea.math
 
-// this package is used to provide concrete implementations of the conversions
-// between numeric primitives. the idea here is that the Numeric trait can
-// extend these traits to inherit the conversions.
+/**
+ * @author Erik Osheim
+ */
 
-// we can also use these implementations to provide a way to convert from
-// A -> B, where both A and B are generic Numeric types. without a separate
-// trait, the compiler will die on circular references.
+/**
+ * This package is used to provide concrete implementations of the conversions
+ * between numeric primitives. The idea here is that the Numeric trait can
+ * extend these traits to inherit the conversions.
+ *
+ * We can also use these implementations to provide a way to convert from
+ * A -> B, where both A and B are generic Numeric types. Without a separate
+ * trait, we'd have circular type definitions when compiling Numeric.
+ */
 
+/**
+ * Conversions to type.
+ *
+ * An object implementing ConvertableTo[A] provides methods to go
+ * from number types to A.
+ */
 trait ConvertableTo[@specialized A] {
   implicit def fromByte(a:Byte): A
   implicit def fromShort(a:Short): A
@@ -81,7 +93,12 @@ object ConvertableTo {
 }
 
 
-//FROM
+/**
+ * Conversions from type.
+ *
+ * An object implementing ConvertableFrom[A] provides methods to go
+ * from A to number types.
+ */
 trait ConvertableFrom[@specialized A] {
   implicit def toByte(a:A): Byte
   implicit def toShort(a:A): Short

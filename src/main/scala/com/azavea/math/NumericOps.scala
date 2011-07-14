@@ -1,6 +1,16 @@
 package com.azavea.math
 
+/**
+ * @author Erik Osheim
+ */
 
+/**
+ * NumericOps adds things like inline operators to A. It's intended to
+ * be used as an implicit decorator like so:
+ *
+ *   def foo[A:Numeric](a:A, b:A) = a + b
+ *      (this is translated into) = new NumericOps(a).+(b)
+ */
 final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A) {
   val n = implicitly[Numeric[A]]
 
@@ -42,6 +52,19 @@ final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A)
   def **~[B:ConvertableFrom](rhs:B) = n.pow(lhs, n.fromType(rhs))
 }
 
+
+/**
+ * IntOps, LongOps and friends provide the same tilde operators as NumericOps
+ * (such as +~, -~, *~, etc) for the number types we're interested in.
+ *
+ * Using these, we use these operators with literals, number types, and
+ * generic types. For instance:
+ *
+ *   def foo[A:Numeric](a:A, b:Int) = (a *~ b) +~ 1
+ *
+ * This isn't possible with the "normal" operators due to the fact that
+ * Int.+ is already defined (as well as the fact that StringOps uses +).
+ */
 
 final class IntOps(val lhs:Int) {
   def <=>~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.compare(n.fromInt(lhs), rhs)
