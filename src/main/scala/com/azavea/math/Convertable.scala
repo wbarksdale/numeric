@@ -97,7 +97,7 @@ object ConvertableTo {
  * Conversions from type.
  *
  * An object implementing ConvertableFrom[A] provides methods to go
- * from A to number types.
+ * from A to number types (and String).
  */
 trait ConvertableFrom[@specialized A] {
   implicit def toByte(a:A): Byte
@@ -106,6 +106,7 @@ trait ConvertableFrom[@specialized A] {
   implicit def toLong(a:A): Long
   implicit def toFloat(a:A): Float
   implicit def toDouble(a:A): Double
+  implicit def toString(a:A): String
 }
 
 trait ConvertableFromByte extends ConvertableFrom[Byte] {
@@ -115,6 +116,7 @@ trait ConvertableFromByte extends ConvertableFrom[Byte] {
   implicit def toLong(a:Byte): Long = a.toLong
   implicit def toFloat(a:Byte): Float = a.toFloat
   implicit def toDouble(a:Byte): Double = a.toDouble
+  implicit def toString(a:Byte): String = a.toString
 }
 
 trait ConvertableFromShort extends ConvertableFrom[Short] {
@@ -124,6 +126,7 @@ trait ConvertableFromShort extends ConvertableFrom[Short] {
   implicit def toLong(a:Short): Long = a.toLong
   implicit def toFloat(a:Short): Float = a.toFloat
   implicit def toDouble(a:Short): Double = a.toDouble
+  implicit def toString(a:Short): String = a.toString
 }
 
 trait ConvertableFromInt extends ConvertableFrom[Int] {
@@ -133,6 +136,7 @@ trait ConvertableFromInt extends ConvertableFrom[Int] {
   implicit def toLong(a:Int): Long = a.toLong
   implicit def toFloat(a:Int): Float = a.toFloat
   implicit def toDouble(a:Int): Double = a.toDouble
+  implicit def toString(a:Int): String = a.toString
 }
 
 trait ConvertableFromLong extends ConvertableFrom[Long] {
@@ -142,6 +146,7 @@ trait ConvertableFromLong extends ConvertableFrom[Long] {
   implicit def toLong(a:Long): Long = a
   implicit def toFloat(a:Long): Float = a.toFloat
   implicit def toDouble(a:Long): Double = a.toDouble
+  implicit def toString(a:Long): String = a.toString
 }
 
 trait ConvertableFromFloat extends ConvertableFrom[Float] {
@@ -151,6 +156,7 @@ trait ConvertableFromFloat extends ConvertableFrom[Float] {
   implicit def toLong(a:Float): Long = a.toLong
   implicit def toFloat(a:Float): Float = a
   implicit def toDouble(a:Float): Double = a.toDouble
+  implicit def toString(a:Float): String = a.toString
 }
 
 trait ConvertableFromDouble extends ConvertableFrom[Double] {
@@ -160,6 +166,7 @@ trait ConvertableFromDouble extends ConvertableFrom[Double] {
   implicit def toLong(a:Double): Long = a.toLong
   implicit def toFloat(a:Double): Float = a.toFloat
   implicit def toDouble(a:Double): Double = a
+  implicit def toString(a:Double): String = a.toString
 }
 
 object ConvertableFrom {

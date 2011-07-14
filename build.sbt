@@ -4,6 +4,10 @@ name := "Numeric"
 // shrug?
 version := "0.1"
 
+// test
+libraryDependencies += "org.scalatest" % "scalatest_2.9.0" % "1.6.1"
+////libraryDependencies += "org.scala-tools.testing" %% "scalacheck" % "1.8" % "test"
+
 // hide backup files
 defaultExcludes ~= (filter => filter || "*~")
 
