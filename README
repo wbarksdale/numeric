@@ -69,3 +69,13 @@ symbol (/) to mean both "integer division" and "true division" it seems clear
 that Numeric can too. 
 
 3. It's in a different package.
+
+4. In addition to the "normal" math operators like +, -, etc, it implements
+versions with a ~ suffix, e.g. +~, -~, *~, etc. Unlike the "normal" ones these
+allow you to mix number literals and generic types freely. For instance:
+
+  def foo[T:Numeric](a:T) = (a *~ 2) +~ 3
+
+Unfortunately you do have to use parenthesis because these operators lack the
+normal precedence rules.
+ 

@@ -2,47 +2,50 @@ This is a random list of things that either would be good to do, or would be
 good to consider doing. Some of these are mutually-incompatible (or at least,
 mutually-undesirable).
 
-1. Use +. instead of (or in addition to) +
+Some of these may also be impossible! :)
 
-This would make it possible to "pimp" literal numbers into the appropriate
-Numeric type using implicits (e.g. a +. 3, or 3 +. a). There are some gotchas:
 
-  a. Things like a + 3.0 might not work as expected (you'd get back a T, which
-     might be an Int). There would need to be warnings (if you want promotion
-     to happen, do it explicitly, e.g. a.toDouble + 3.0).
+0. Figure out how to make the implicit decorations for inline operators faster
 
-  b. Operator precedence might not work well. There would need to be warnings
-     about this (e.g. a +: b *: c +: d).
+Supposedly escape analysis can optimize away the objects created by the
+implicit decorator pattern but I have yet to see evidence of this when dealing
+with AnyVal types like Int. I don't know how to make this faster, but it is the
+#1 problem with this library (and Numeric in general).
 
-[This is done... used +~ instead because of problems with "."]
 
-2. Add things like: add(T, Int), add(Int, T), add(T, Long), etc.
+1. Implement a c.a.m.NumericRange class in terms of c.a.m.Numeric
 
-If you don't like #1, this is another way to make working with literals a lot
-nicer. But there are some problems:
+Paul Phillips has encouraged me to do this. I managed to create something that
+worked but wasn't performing as well as the direct integer ranges. The problem
+seemed to be the difference between the way foo(Int => Unit) and foo[T](T =>
+Unit) are treated. 
 
-  a. If you are doing something like "T + Float" you can't be sure if the
-     result should be T, Float, or something else.
 
-  b. It's a lot of boilerplate.
+2. Add BigInt, BigDecimal support
 
-  c. It wouldn't behave reliably with infix operators
-     (e.g. a + 3 would work, 3 + a would not)
+These probably won't be super fast, but it would be nice to support them.
 
-[Doesn't seem like a good idea at this point]
 
-3. Create implicit conversions using toNumeric[T]
+3. Try creating some kind of complex type
+
+This could be something like case class Complex(real:Double, imag:Double)
+or maybe even something crazier like Complex[T:Numeric](real:T, imag:T)
+
+
+4. Create implicit conversions using toNumeric[T]
 
 This would allow someone to say 3.toNumeric[T] rather than having to get a
 reference to the Numeric instance and say n.fromInt(3).
 
-4. Specialize Ordering
+
+5. Specialize Ordering
 
 This is probably too big for this project, but it would be great if Ordering
 were specialized so that Numeric could extend it without taking a huge speed
 hit on things like Numeric.lt().
 
-5. Rationalize working with two different numeric types
+
+6. Rationalize working with two different numeric types
 
 Currently if you have "def complicated[T:Numeric, U:Numeric](t:T, u:U)" you
 will have to do manual conversions to one of those types without being sure
@@ -52,3 +55,20 @@ terms of which one should "win" in terms of precision. That way you could at
 least say something like "if (n1.morePreciseThan(n2)) ... else ..."
 
 I'm not sure how often this would be used, but I could imagine it being nice.
+
+
+7. Worry about Hotspot de-inlining in Main.scala
+
+I tried to save some code by using inheritence, but it's possible that this is
+making certain tests run slower (as I found out while writing the IncrementInt*
+family of tests). It would be great to try to make sure that this isn't a
+problem.
+
+
+8. Test on more hardware/JVM configurations
+
+
+9. Port tests to one of the newer performance testing frameworks
+
+
+10. Write more tests
