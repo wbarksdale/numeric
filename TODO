@@ -14,6 +14,8 @@ Numeric type using implicits (e.g. a +. 3, or 3 +. a). There are some gotchas:
   b. Operator precedence might not work well. There would need to be warnings
      about this (e.g. a +: b *: c +: d).
 
+[This is done... used +~ instead because of problems with "."]
+
 2. Add things like: add(T, Int), add(Int, T), add(T, Long), etc.
 
 If you don't like #1, this is another way to make working with literals a lot
@@ -26,6 +28,8 @@ nicer. But there are some problems:
 
   c. It wouldn't behave reliably with infix operators
      (e.g. a + 3 would work, 3 + a would not)
+
+[Doesn't seem like a good idea at this point]
 
 3. Create implicit conversions using toNumeric[T]
 

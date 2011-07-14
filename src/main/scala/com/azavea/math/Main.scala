@@ -9,43 +9,35 @@ import java.io.{FileWriter, PrintWriter}
 
 import Console.printf
 
-import Numeric.{numeric, infixNumericOps}
+
+import Implicits._
 
 // define some constant sizes and random arrays that we can use for our various
 // performance tests. if things run way too slow or way too fast you can try
-// removing or adding zeros. :)
+// changing the factor :)
 object Constant {
-  val SM_SIZE  = 10000
-  val MD_SIZE  = 100000
-  val ML_SIZE  = 1000000
-  val LG_SIZE  = 10000000
+  val factor = 1
+  val divisor = 1
 
-  val SM_DATA  = Array.ofDim[Int](SM_SIZE).map(i => Random.nextInt())
-  val MD_DATA  = Array.ofDim[Int](MD_SIZE).map(i => Random.nextInt())
-  val LG_DATA  = Array.ofDim[Int](LG_SIZE).map(i => Random.nextInt())
-  val LG_DATA2  = Array.ofDim[Int](LG_SIZE).map(i => Random.nextInt())
-
-  val LG_DBL_DATA  = Array.ofDim[Double](LG_SIZE).map(i => Random.nextDouble())
-
-  val tinySize = (10 * 1000)
+  val tinySize:Int = (10 * 1000 * factor) / divisor
   val tinyIntArray = Array.ofDim[Int](tinySize).map(i => Random.nextInt())
   val tinyLongArray = Array.ofDim[Long](tinySize).map(i => Random.nextLong())
   val tinyFloatArray = Array.ofDim[Float](tinySize).map(i => Random.nextFloat())
   val tinyDoubleArray = Array.ofDim[Double](tinySize).map(i => Random.nextDouble())
 
-  val smallSize = (100 * 1000)
+  val smallSize:Int = (100 * 1000 * factor) / divisor
   val smallIntArray = Array.ofDim[Int](smallSize).map(i => Random.nextInt())
   val smallLongArray = Array.ofDim[Long](smallSize).map(i => Random.nextLong())
   val smallFloatArray = Array.ofDim[Float](smallSize).map(i => Random.nextFloat())
   val smallDoubleArray = Array.ofDim[Double](smallSize).map(i => Random.nextDouble())
 
-  val mediumSize = (1 * 1000 * 1000)
+  val mediumSize:Int = (1 * 1000 * 1000 * factor) / divisor
   val mediumIntArray = Array.ofDim[Int](mediumSize).map(i => Random.nextInt())
   val mediumLongArray = Array.ofDim[Long](mediumSize).map(i => Random.nextLong())
   val mediumFloatArray = Array.ofDim[Float](mediumSize).map(i => Random.nextFloat())
   val mediumDoubleArray = Array.ofDim[Double](mediumSize).map(i => Random.nextDouble())
 
-  val largeSize = (10 * 1000 * 1000)
+  val largeSize:Int = (10 * 1000 * 1000 * factor) / divisor
   val largeIntArray = Array.ofDim[Int](largeSize).map(i => Random.nextInt())
   val largeLongArray = Array.ofDim[Long](largeSize).map(i => Random.nextLong())
   val largeFloatArray = Array.ofDim[Float](largeSize).map(i => Random.nextFloat())
@@ -642,7 +634,7 @@ trait Quicksort extends BaseSort {
   def directFloatSorter(a:Array[Float]) = { val d = a.clone; scala.util.Sorting.quickSort(d); d }
   def directDoubleSorter(a:Array[Double]) = { val d = a.clone; scala.util.Sorting.quickSort(d); d }
 
-  //def newGenericSorter[@specialized A:Numeric:Manifest](a:Array[A]) = null
+  // NOTE: this will perform slowly just because Ordering is not specialized!
   def newGenericSorter[@specialized A:Numeric:Manifest](a:Array[A]) = {
     val d = a.clone;
     implicit val ord = implicitly[Numeric[A]].getOrdering()
@@ -865,30 +857,30 @@ trait ArrayAllocator extends TestCase {
 
 class ArrayAllocatorInt extends ArrayAllocator {
   def name = "array-allocator-int"
-  def direct = Option(directIntAllocator(ML_SIZE, 5, 13))
-  def newGeneric = Option(newAllocator(ML_SIZE, 5, 13))
-  def oldGeneric = Option(oldAllocator(ML_SIZE, 5, 13))
+  def direct = Option(directIntAllocator(mediumSize, 5, 13))
+  def newGeneric = Option(newAllocator(mediumSize, 5, 13))
+  def oldGeneric = Option(oldAllocator(mediumSize, 5, 13))
 }
 
 class ArrayAllocatorLong extends ArrayAllocator {
   def name = "array-allocator-long"
-  def direct = Option(directLongAllocator(ML_SIZE, 5, 13L))
-  def newGeneric = Option(newAllocator(ML_SIZE, 5, 13L))
-  def oldGeneric = Option(oldAllocator(ML_SIZE, 5, 13L))
+  def direct = Option(directLongAllocator(mediumSize, 5, 13L))
+  def newGeneric = Option(newAllocator(mediumSize, 5, 13L))
+  def oldGeneric = Option(oldAllocator(mediumSize, 5, 13L))
 }
 
 class ArrayAllocatorFloat extends ArrayAllocator {
   def name = "array-allocator-float"
-  def direct = Option(directFloatAllocator(ML_SIZE, 5, 13.0F))
-  def newGeneric = Option(newAllocator(ML_SIZE, 5, 13.0F))
-  def oldGeneric = Option(oldAllocator(ML_SIZE, 5, 13.0F))
+  def direct = Option(directFloatAllocator(mediumSize, 5, 13.0F))
+  def newGeneric = Option(newAllocator(mediumSize, 5, 13.0F))
+  def oldGeneric = Option(oldAllocator(mediumSize, 5, 13.0F))
 }
 
 class ArrayAllocatorDouble extends ArrayAllocator {
   def name = "array-allocator-double"
-  def direct = Option(directDoubleAllocator(ML_SIZE, 5, 13.0))
-  def newGeneric = Option(newAllocator(ML_SIZE, 5, 13.0))
-  def oldGeneric = Option(oldAllocator(ML_SIZE, 5, 13.0))
+  def direct = Option(directDoubleAllocator(mediumSize, 5, 13.0))
+  def newGeneric = Option(newAllocator(mediumSize, 5, 13.0))
+  def oldGeneric = Option(oldAllocator(mediumSize, 5, 13.0))
 }
 
 // =================================================================
@@ -1105,6 +1097,156 @@ class MergeSortDouble extends MergeSort {
 }
 
 
+// =================================================================
+class IncrementInt1 extends TestCase {
+  def name = "increment-int1"
+
+  def directIncrement(x:Int) = x + 100
+  def direct() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = directIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def newIncrement[@specialized A:Numeric](a:A):A = numeric.plus(a, numeric.fromInt(100))
+  def newGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = newIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def oldIncrement[A](a:A)(implicit n:OldNumeric[A]) = n.plus(a, n.fromInt(100))
+  def oldGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = oldIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+}
+
+class IncrementInt2 extends TestCase {
+  def name = "increment-int2"
+
+  def directIncrement(x:Int) = x + 100
+  def direct() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = directIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def newIncrement[@specialized A:Numeric](a:A):A = a +~ numeric.fromInt(100)
+  def newGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = newIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def oldIncrement[A](a:A)(implicit n:OldNumeric[A]) = n.plus(a, n.fromInt(100))
+  def oldGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = oldIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+}
+
+class IncrementInt3 extends TestCase {
+  def name = "increment-int3"
+
+  def directIncrement(x:Int) = x + 100
+  def direct() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = directIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def newIncrement[@specialized A:Numeric](a:A):A = a +~ 100
+  def newGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = newIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def oldIncrement[A](a:A)(implicit n:OldNumeric[A]) = n.plus(a, n.fromInt(100))
+  def oldGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = oldIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+}
+
+class IncrementInt4 extends TestCase {
+  def name = "increment-int4"
+
+  def directIncrement(x:Int) = x + 100
+  def direct() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = directIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def newIncrement[@specialized A:Numeric](a:A):A = 100 +~ a
+  def newGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = newIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+
+  def oldIncrement[A](a:A)(implicit n:OldNumeric[A]) = n.plus(a, n.fromInt(100))
+  def oldGeneric() = {
+    var i = 0
+    var total = 0
+    while (i < largeSize) {
+      total = oldIncrement(total)
+      i += 1
+    }
+    Some(total)
+  }
+}
+
+
 object Main {
   val tests = List(List(new FromIntToInt,
                         new FromIntToLong,
@@ -1154,8 +1296,14 @@ object Main {
                    List(new InfixAdderInt,
                         new InfixAdderLong,
                         new InfixAdderFloat,
-                        new InfixAdderDouble))
-  
+                        new InfixAdderDouble),
+                   
+                   List(new IncrementInt1,
+                        new IncrementInt2,
+                        new IncrementInt3,
+                        new IncrementInt4))
+                   
+                   
   def getHTMLHeader() = """
 <html>
  <head>

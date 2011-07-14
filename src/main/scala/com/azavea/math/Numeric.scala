@@ -28,7 +28,7 @@ import scala.math.{abs, min, max, pow}
  * }}}
  * 
  */
-trait Numeric[@specialized A] extends ConvertableFrom[A] with ConvertableTo[A] {
+trait Numeric[@specialized(Int,Long,Float,Double) A] extends ConvertableFrom[A] with ConvertableTo[A] {
 
   /**
    * Computes the absolute value of `a`.
@@ -210,6 +210,9 @@ trait Numeric[@specialized A] extends ConvertableFrom[A] with ConvertableTo[A] {
   def getOrdering():Ordering[A] = new NumericOrdering(this)
 }
 
+/**
+ * This is a little helper class that allows us to support the Ordering trait.
+ */
 class NumericOrdering[A](n:Numeric[A]) extends Ordering[A] {
   def compare(a:A, b:A) = n.compare(a, b)
 }
@@ -303,12 +306,21 @@ trait DoubleIsNumeric extends Numeric[Double] with ConvertableFromDouble with Co
 }
 
 object Numeric {
-  implicit def infixNumericOps[@specialized A:Numeric](a:A):NumericOps[A] = new NumericOpsCls(a)
-
-  def numeric[@specialized A:Numeric]() = implicitly[Numeric[A]]
+  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]():Numeric[A] = implicitly[Numeric[A]]
 
   implicit object IntIsNumeric extends IntIsNumeric
   implicit object LongIsNumeric extends LongIsNumeric
   implicit object FloatIsNumeric extends FloatIsNumeric
   implicit object DoubleIsNumeric extends DoubleIsNumeric
+}
+
+object Implicits {
+  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A):NumericOps[A] = new NumericOps(a)
+
+  implicit def infixIntOps(i:Int):IntOps = new IntOps(i)
+  implicit def infixLongOps(l:Long):LongOps = new LongOps(l)
+  implicit def infixFloatOps(f:Float):FloatOps = new FloatOps(f)
+  implicit def infixDoubleOps(d:Double):DoubleOps = new DoubleOps(d)
+
+  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]():Numeric[A] = implicitly[Numeric[A]]
 }

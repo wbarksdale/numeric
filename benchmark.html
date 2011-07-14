@@ -5,11 +5,9 @@
     td { text-align: right; padding: 4px; }
     td { border: 1px solid black; padding: 4px; }
     thead { background-color: lightgrey; }
-
     .na { border: 0px; }
     .base { border: 0px; }
     .sep { border: 0px; colspan="6" }
-
     .name { background-color: lightgrey; }
     .great { background-color: #99ccff; }
     .good { background-color: #99ff99; }
@@ -28,64 +26,70 @@
   
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>from-int-to-int</td><td class='base'>22.3</td><td class='good'>22.0</td><td class='good'> 0.99x</td><td class='bad'>169.1</td><td class='bad'> 7.60x</td></tr>
-  <tr><td class='name'>from-int-to-long</td><td class='base'>38.0</td><td class='good'>37.3</td><td class='good'> 0.98x</td><td class='bad'>244.5</td><td class='bad'> 6.43x</td></tr>
-  <tr><td class='name'>from-int-to-float</td><td class='base'>23.1</td><td class='good'>23.0</td><td class='good'> 0.99x</td><td class='bad'>202.5</td><td class='bad'> 8.76x</td></tr>
-  <tr><td class='name'>from-int-to-double</td><td class='base'>40.0</td><td class='good'>37.9</td><td class='good'> 0.95x</td><td class='bad'>271.4</td><td class='bad'> 6.78x</td></tr>
+  <tr><td class='name'>from-int-to-int</td><td class='base'>23.9</td><td class='good'>22.6</td><td class='good'> 0.95x</td><td class='bad'>131.8</td><td class='bad'> 5.52x</td></tr>
+  <tr><td class='name'>from-int-to-long</td><td class='base'>40.1</td><td class='good'>38.4</td><td class='good'> 0.96x</td><td class='bad'>194.9</td><td class='bad'> 4.86x</td></tr>
+  <tr><td class='name'>from-int-to-float</td><td class='base'>20.0</td><td class='good'>19.5</td><td class='good'> 0.98x</td><td class='bad'>117.4</td><td class='bad'> 5.87x</td></tr>
+  <tr><td class='name'>from-int-to-double</td><td class='base'>33.0</td><td class='good'>33.1</td><td class='good'> 1.00x</td><td class='poor'>126.5</td><td class='poor'> 3.83x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>adder-int</td><td class='base'>12.6</td><td class='good'>13.5</td><td class='good'> 1.07x</td><td class='awful'>145.3</td><td class='awful'>11.50x</td></tr>
-  <tr><td class='name'>adder-long</td><td class='base'>21.1</td><td class='good'>21.4</td><td class='good'> 1.01x</td><td class='bad'>153.8</td><td class='bad'> 7.28x</td></tr>
-  <tr><td class='name'>adder-float</td><td class='base'>27.5</td><td class='good'>27.8</td><td class='good'> 1.01x</td><td class='good'>27.5</td><td class='good'> 1.00x</td></tr>
-  <tr><td class='name'>adder-double</td><td class='base'>27.3</td><td class='good'>26.0</td><td class='good'> 0.95x</td><td class='good'>27.5</td><td class='good'> 1.01x</td></tr>
+  <tr><td class='name'>adder-int</td><td class='base'>11.6</td><td class='good'>12.1</td><td class='good'> 1.04x</td><td class='awful'>147.6</td><td class='awful'>12.70x</td></tr>
+  <tr><td class='name'>adder-long</td><td class='base'>21.8</td><td class='good'>22.0</td><td class='good'> 1.01x</td><td class='bad'>177.4</td><td class='bad'> 8.16x</td></tr>
+  <tr><td class='name'>adder-float</td><td class='base'>29.0</td><td class='good'>28.6</td><td class='good'> 0.99x</td><td class='good'>29.3</td><td class='good'> 1.01x</td></tr>
+  <tr><td class='name'>adder-double</td><td class='base'>29.6</td><td class='good'>28.8</td><td class='good'> 0.97x</td><td class='good'>28.4</td><td class='good'> 0.96x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>array-total-int</td><td class='base'>8.3</td><td class='good'>8.3</td><td class='good'> 1.00x</td><td class='awful'>246.4</td><td class='awful'>29.86x</td></tr>
-  <tr><td class='name'>array-total-long</td><td class='base'>11.5</td><td class='good'>11.1</td><td class='good'> 0.97x</td><td class='awful'>310.8</td><td class='awful'>27.02x</td></tr>
-  <tr><td class='name'>array-total-float</td><td class='base'>16.1</td><td class='good'>16.6</td><td class='good'> 1.03x</td><td class='awful'>217.1</td><td class='awful'>13.47x</td></tr>
-  <tr><td class='name'>array-total-double</td><td class='base'>17.3</td><td class='good'>16.8</td><td class='good'> 0.97x</td><td class='awful'>216.8</td><td class='awful'>12.57x</td></tr>
+  <tr><td class='name'>array-total-int</td><td class='base'>9.1</td><td class='good'>9.0</td><td class='good'> 0.99x</td><td class='awful'>175.9</td><td class='awful'>19.27x</td></tr>
+  <tr><td class='name'>array-total-long</td><td class='base'>13.3</td><td class='good'>13.8</td><td class='good'> 1.04x</td><td class='awful'>198.8</td><td class='awful'>15.00x</td></tr>
+  <tr><td class='name'>array-total-float</td><td class='base'>18.5</td><td class='good'>18.9</td><td class='good'> 1.02x</td><td class='bad'>159.5</td><td class='bad'> 8.62x</td></tr>
+  <tr><td class='name'>array-total-double</td><td class='base'>19.1</td><td class='good'>19.3</td><td class='good'> 1.01x</td><td class='awful'>187.4</td><td class='awful'> 9.80x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>array-rescale-int</td><td class='base'>27.1</td><td class='good'>26.8</td><td class='good'> 0.99x</td><td class='awful'>357.8</td><td class='awful'>13.19x</td></tr>
-  <tr><td class='name'>array-rescale-long</td><td class='base'>24.6</td><td class='good'>24.6</td><td class='good'> 1.00x</td><td class='awful'>540.6</td><td class='awful'>21.95x</td></tr>
-  <tr><td class='name'>array-rescale-float</td><td class='base'>59.3</td><td class='good'>59.6</td><td class='good'> 1.01x</td><td class='bad'>366.9</td><td class='bad'> 6.19x</td></tr>
-  <tr><td class='name'>array-rescale-double</td><td class='base'>91.4</td><td class='good'>91.1</td><td class='good'> 1.00x</td><td class='poor'>394.3</td><td class='poor'> 4.31x</td></tr>
+  <tr><td class='name'>array-rescale-int</td><td class='base'>26.9</td><td class='good'>27.1</td><td class='good'> 1.01x</td><td class='awful'>280.9</td><td class='awful'>10.45x</td></tr>
+  <tr><td class='name'>array-rescale-long</td><td class='base'>25.0</td><td class='good'>25.8</td><td class='good'> 1.03x</td><td class='awful'>341.6</td><td class='awful'>13.67x</td></tr>
+  <tr><td class='name'>array-rescale-float</td><td class='base'>59.8</td><td class='good'>59.8</td><td class='good'> 1.00x</td><td class='poor'>229.6</td><td class='poor'> 3.84x</td></tr>
+  <tr><td class='name'>array-rescale-double</td><td class='base'>91.6</td><td class='good'>91.5</td><td class='good'> 1.00x</td><td class='poor'>220.3</td><td class='poor'> 2.40x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>find-max-int</td><td class='base'>16.6</td><td class='good'>16.9</td><td class='good'> 1.02x</td><td class='awful'>166.0</td><td class='awful'> 9.98x</td></tr>
-  <tr><td class='name'>find-max-long</td><td class='base'>12.1</td><td class='good'>12.1</td><td class='good'> 1.00x</td><td class='awful'>199.6</td><td class='awful'>16.46x</td></tr>
-  <tr><td class='name'>find-max-float</td><td class='base'>22.6</td><td class='good'>22.4</td><td class='good'> 0.99x</td><td class='bad'>187.8</td><td class='bad'> 8.30x</td></tr>
-  <tr><td class='name'>find-max-double</td><td class='base'>23.9</td><td class='good'>23.5</td><td class='good'> 0.98x</td><td class='bad'>195.6</td><td class='bad'> 8.19x</td></tr>
+  <tr><td class='name'>find-max-int</td><td class='base'>16.9</td><td class='good'>16.6</td><td class='good'> 0.99x</td><td class='bad'>142.8</td><td class='bad'> 8.46x</td></tr>
+  <tr><td class='name'>find-max-long</td><td class='base'>12.1</td><td class='good'>11.6</td><td class='good'> 0.96x</td><td class='awful'>171.6</td><td class='awful'>14.15x</td></tr>
+  <tr><td class='name'>find-max-float</td><td class='base'>22.5</td><td class='good'>22.6</td><td class='good'> 1.01x</td><td class='bad'>141.5</td><td class='bad'> 6.29x</td></tr>
+  <tr><td class='name'>find-max-double</td><td class='base'>25.5</td><td class='good'>23.3</td><td class='good'> 0.91x</td><td class='bad'>124.4</td><td class='bad'> 4.88x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>quicksort-int</td><td class='base'>155.9</td><td class='bad'>820.1</td><td class='bad'> 5.26x</td><td class='bad'>929.0</td><td class='bad'> 5.96x</td></tr>
-  <tr><td class='name'>quicksort-long</td><td class='base'>1105.0</td><td class='ok'>1326.4</td><td class='ok'> 1.20x</td><td class='ok'>1238.6</td><td class='ok'> 1.12x</td></tr>
-  <tr><td class='name'>quicksort-float</td><td class='base'>228.6</td><td class='bad'>1493.0</td><td class='bad'> 6.53x</td><td class='bad'>1364.5</td><td class='bad'> 5.97x</td></tr>
-  <tr><td class='name'>quicksort-double</td><td class='base'>251.0</td><td class='bad'>1470.3</td><td class='bad'> 5.86x</td><td class='bad'>1306.3</td><td class='bad'> 5.20x</td></tr>
+  <tr><td class='name'>quicksort-int</td><td class='base'>159.3</td><td class='bad'>789.9</td><td class='bad'> 4.96x</td><td class='bad'>829.9</td><td class='bad'> 5.21x</td></tr>
+  <tr><td class='name'>quicksort-long</td><td class='base'>923.9</td><td class='ok'>1178.9</td><td class='ok'> 1.28x</td><td class='ok'>1101.4</td><td class='ok'> 1.19x</td></tr>
+  <tr><td class='name'>quicksort-float</td><td class='base'>232.8</td><td class='bad'>1215.6</td><td class='bad'> 5.22x</td><td class='bad'>1176.9</td><td class='bad'> 5.06x</td></tr>
+  <tr><td class='name'>quicksort-double</td><td class='base'>243.6</td><td class='bad'>1186.6</td><td class='bad'> 4.87x</td><td class='poor'>1049.6</td><td class='poor'> 4.31x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>array-allocator-int</td><td class='base'>68.4</td><td class='good'>73.3</td><td class='good'> 1.07x</td><td class='great'>42.6</td><td class='great'> 0.62x</td></tr>
-  <tr><td class='name'>array-allocator-long</td><td class='base'>101.9</td><td class='good'>102.4</td><td class='good'> 1.00x</td><td class='ok'>143.3</td><td class='ok'> 1.41x</td></tr>
-  <tr><td class='name'>array-allocator-float</td><td class='base'>87.4</td><td class='good'>82.5</td><td class='good'> 0.94x</td><td class='ok'>146.8</td><td class='ok'> 1.68x</td></tr>
-  <tr><td class='name'>array-allocator-double</td><td class='base'>82.9</td><td class='good'>83.0</td><td class='good'> 1.00x</td><td class='ok'>162.4</td><td class='ok'> 1.96x</td></tr>
+  <tr><td class='name'>array-allocator-int</td><td class='base'>72.8</td><td class='ok'>96.1</td><td class='ok'> 1.32x</td><td class='ok'>131.3</td><td class='ok'> 1.80x</td></tr>
+  <tr><td class='name'>array-allocator-long</td><td class='base'>126.5</td><td class='good'>121.1</td><td class='good'> 0.96x</td><td class='ok'>160.8</td><td class='ok'> 1.27x</td></tr>
+  <tr><td class='name'>array-allocator-float</td><td class='base'>86.4</td><td class='good'>78.9</td><td class='good'> 0.91x</td><td class='ok'>141.5</td><td class='ok'> 1.64x</td></tr>
+  <tr><td class='name'>array-allocator-double</td><td class='base'>80.9</td><td class='good'>82.0</td><td class='good'> 1.01x</td><td class='ok'>161.9</td><td class='ok'> 2.00x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>insertion-sort-int</td><td class='base'>47.5</td><td class='good'>48.6</td><td class='good'> 1.02x</td><td class='awful'>1463.0</td><td class='awful'>30.80x</td></tr>
-  <tr><td class='name'>insertion-sort-long</td><td class='base'>49.9</td><td class='good'>50.3</td><td class='good'> 1.01x</td><td class='awful'>1440.6</td><td class='awful'>28.88x</td></tr>
-  <tr><td class='name'>insertion-sort-float</td><td class='base'>50.0</td><td class='good'>50.9</td><td class='good'> 1.02x</td><td class='awful'>1658.6</td><td class='awful'>33.17x</td></tr>
-  <tr><td class='name'>insertion-sort-double</td><td class='base'>49.3</td><td class='good'>49.9</td><td class='good'> 1.01x</td><td class='awful'>1850.5</td><td class='awful'>37.57x</td></tr>
+  <tr><td class='name'>insertion-sort-int</td><td class='base'>48.1</td><td class='good'>48.8</td><td class='good'> 1.01x</td><td class='awful'>1155.3</td><td class='awful'>24.01x</td></tr>
+  <tr><td class='name'>insertion-sort-long</td><td class='base'>50.9</td><td class='good'>50.1</td><td class='good'> 0.99x</td><td class='awful'>1518.0</td><td class='awful'>29.84x</td></tr>
+  <tr><td class='name'>insertion-sort-float</td><td class='base'>51.6</td><td class='good'>51.3</td><td class='good'> 0.99x</td><td class='awful'>1532.1</td><td class='awful'>29.68x</td></tr>
+  <tr><td class='name'>insertion-sort-double</td><td class='base'>50.3</td><td class='good'>50.4</td><td class='good'> 1.00x</td><td class='awful'>1188.3</td><td class='awful'>23.65x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>merge-sort-int</td><td class='base'>275.6</td><td class='good'>293.0</td><td class='good'> 1.06x</td><td class='poor'>870.9</td><td class='poor'> 3.16x</td></tr>
-  <tr><td class='name'>merge-sort-long</td><td class='base'>288.3</td><td class='great'>215.0</td><td class='great'> 0.75x</td><td class='poor'>842.9</td><td class='poor'> 2.92x</td></tr>
-  <tr><td class='name'>merge-sort-float</td><td class='base'>186.8</td><td class='ok'>206.5</td><td class='ok'> 1.11x</td><td class='bad'>901.3</td><td class='bad'> 4.83x</td></tr>
-  <tr><td class='name'>merge-sort-double</td><td class='base'>197.6</td><td class='ok'>218.8</td><td class='ok'> 1.11x</td><td class='bad'>895.5</td><td class='bad'> 4.53x</td></tr>
+  <tr><td class='name'>merge-sort-int</td><td class='base'>279.0</td><td class='good'>297.3</td><td class='good'> 1.07x</td><td class='poor'>813.1</td><td class='poor'> 2.91x</td></tr>
+  <tr><td class='name'>merge-sort-long</td><td class='base'>292.8</td><td class='great'>218.0</td><td class='great'> 0.74x</td><td class='poor'>718.9</td><td class='poor'> 2.46x</td></tr>
+  <tr><td class='name'>merge-sort-float</td><td class='base'>187.5</td><td class='good'>199.3</td><td class='good'> 1.06x</td><td class='poor'>731.8</td><td class='poor'> 3.90x</td></tr>
+  <tr><td class='name'>merge-sort-double</td><td class='base'>199.6</td><td class='good'>212.9</td><td class='good'> 1.07x</td><td class='poor'>703.6</td><td class='poor'> 3.52x</td></tr>
 <tr><td class='sep' /></tr>
 
-  <tr><td class='name'>infix-adder-int</td><td class='base'>20.5</td><td class='poor'>57.1</td><td class='poor'> 2.79x</td><td class='bad'>125.9</td><td class='bad'> 6.14x</td></tr>
-  <tr><td class='name'>infix-adder-long</td><td class='base'>20.8</td><td class='poor'>62.3</td><td class='poor'> 3.00x</td><td class='awful'>250.6</td><td class='awful'>12.08x</td></tr>
-  <tr><td class='name'>infix-adder-float</td><td class='base'>20.9</td><td class='ok'>33.9</td><td class='ok'> 1.62x</td><td class='bad'>176.4</td><td class='bad'> 8.45x</td></tr>
-  <tr><td class='name'>infix-adder-double</td><td class='base'>28.8</td><td class='ok'>32.9</td><td class='ok'> 1.14x</td><td class='bad'>189.0</td><td class='bad'> 6.57x</td></tr>
+  <tr><td class='name'>infix-adder-int</td><td class='base'>11.1</td><td class='poor'>32.9</td><td class='poor'> 2.96x</td><td class='awful'>128.4</td><td class='awful'>11.54x</td></tr>
+  <tr><td class='name'>infix-adder-long</td><td class='base'>20.9</td><td class='ok'>26.8</td><td class='ok'> 1.28x</td><td class='awful'>291.0</td><td class='awful'>13.94x</td></tr>
+  <tr><td class='name'>infix-adder-float</td><td class='base'>22.3</td><td class='ok'>34.4</td><td class='ok'> 1.54x</td><td class='bad'>187.9</td><td class='bad'> 8.44x</td></tr>
+  <tr><td class='name'>infix-adder-double</td><td class='base'>27.9</td><td class='ok'>32.3</td><td class='ok'> 1.16x</td><td class='bad'>190.0</td><td class='bad'> 6.82x</td></tr>
+<tr><td class='sep' /></tr>
+
+  <tr><td class='name'>increment-int1</td><td class='base'>0.0</td><td class='na'></td><td class='na'></td><td class='great'>104.3</td><td class='great'>   n/a</td></tr>
+  <tr><td class='name'>increment-int2</td><td class='base'>0.0</td><td class='great'>36.0</td><td class='great'>   n/a</td><td class='great'>103.5</td><td class='great'>   n/a</td></tr>
+  <tr><td class='name'>increment-int3</td><td class='base'>0.0</td><td class='great'>28.5</td><td class='great'>   n/a</td><td class='great'>105.4</td><td class='great'>   n/a</td></tr>
+  <tr><td class='name'>increment-int4</td><td class='base'>0.0</td><td class='great'>27.8</td><td class='great'>   n/a</td><td class='great'>103.5</td><td class='great'>   n/a</td></tr>
   </table>
  </body>
 </html>
