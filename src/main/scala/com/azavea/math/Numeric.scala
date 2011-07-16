@@ -315,6 +315,52 @@ extends Numeric[Double] with ConvertableFromDouble with ConvertableToDouble {
   def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toDouble(b)
 }
 
+trait BigIntIsNumeric
+extends Numeric[BigInt] with ConvertableFromBigInt with ConvertableToBigInt {
+  def abs(a:BigInt): BigInt = a.abs
+  def div(a:BigInt, b:BigInt): BigInt = a / b
+  def equiv(a:BigInt, b:BigInt): Boolean = a == b
+  def gt(a:BigInt, b:BigInt): Boolean = a > b
+  def gteq(a:BigInt, b:BigInt): Boolean = a >= b
+  def lt(a:BigInt, b:BigInt): Boolean = a < b
+  def lteq(a:BigInt, b:BigInt): Boolean = a <= b
+  def max(a:BigInt, b:BigInt): BigInt = a.max(b)
+  def min(a:BigInt, b:BigInt): BigInt = a.min(b)
+  def minus(a:BigInt, b:BigInt): BigInt = a - b
+  def mod(a:BigInt, b:BigInt): BigInt = a % b
+  def negate(a:BigInt): BigInt = -a
+  def one: BigInt = BigInt(1)
+  def plus(a:BigInt, b:BigInt): BigInt = a + b
+  def pow(a:BigInt, b:BigInt): BigInt = a.pow(b)
+  def times(a:BigInt, b:BigInt): BigInt = a * b
+  def zero: BigInt = BigInt(0)
+  
+  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigInt(b)
+}
+
+trait BigDecimalIsNumeric
+extends Numeric[BigDecimal] with ConvertableFromBigDecimal with ConvertableToBigDecimal {
+  def abs(a:BigDecimal): BigDecimal = a.abs
+  def div(a:BigDecimal, b:BigDecimal): BigDecimal = a / b
+  def equiv(a:BigDecimal, b:BigDecimal): Boolean = a == b
+  def gt(a:BigDecimal, b:BigDecimal): Boolean = a > b
+  def gteq(a:BigDecimal, b:BigDecimal): Boolean = a >= b
+  def lt(a:BigDecimal, b:BigDecimal): Boolean = a < b
+  def lteq(a:BigDecimal, b:BigDecimal): Boolean = a <= b
+  def max(a:BigDecimal, b:BigDecimal): BigDecimal = a.max(b)
+  def min(a:BigDecimal, b:BigDecimal): BigDecimal = a.min(b)
+  def minus(a:BigDecimal, b:BigDecimal): BigDecimal = a - b
+  def mod(a:BigDecimal, b:BigDecimal): BigDecimal = a % b
+  def negate(a:BigDecimal): BigDecimal = -a
+  def one: BigDecimal = BigDecimal(1.0)
+  def plus(a:BigDecimal, b:BigDecimal): BigDecimal = a + b
+  def pow(a:BigDecimal, b:BigDecimal): BigDecimal = a.pow(b)
+  def times(a:BigDecimal, b:BigDecimal): BigDecimal = a * b
+  def zero: BigDecimal = BigDecimal(0.0)
+  
+  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigDecimal(b)
+}
+
 
 /**
  * This companion object provides the instances (e.g. IntIsNumeric)
