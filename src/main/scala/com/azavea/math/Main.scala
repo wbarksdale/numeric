@@ -527,11 +527,23 @@ trait InfixAdder extends BaseAdder {
   }
 }
 
+trait InfixAdder2 extends BaseAdder {
+  def newAdder[@specialized A:Numeric](a:A, b:A): A = a +~ b
+  def oldAdder[A](a:A, b:A)(implicit m:OldNumeric[A]): A = {
+    import m._
+    a + b
+  }
+}
+
 class InfixAdderInt extends InfixAdder with BaseAdderInt { def name = "infix-adder-int" }
 class InfixAdderLong extends InfixAdder with BaseAdderLong { def name = "infix-adder-long" }
 class InfixAdderFloat extends InfixAdder with BaseAdderFloat { def name = "infix-adder-float" }
 class InfixAdderDouble extends InfixAdder with BaseAdderDouble{ def name = "infix-adder-double" }
 
+class InfixAdder2Int extends InfixAdder2 with BaseAdderInt { def name = "infix-adder-int" }
+class InfixAdder2Long extends InfixAdder2 with BaseAdderLong { def name = "infix-adder-long" }
+class InfixAdder2Float extends InfixAdder2 with BaseAdderFloat { def name = "infix-adder-float" }
+class InfixAdder2Double extends InfixAdder2 with BaseAdderDouble{ def name = "infix-adder-double" }
 
 // ==========================================================
 trait FindMax extends TestCase {
@@ -1297,6 +1309,11 @@ object Main {
                         new InfixAdderLong,
                         new InfixAdderFloat,
                         new InfixAdderDouble),
+                   
+                   List(new InfixAdder2Int,
+                        new InfixAdder2Long,
+                        new InfixAdder2Float,
+                        new InfixAdder2Double),
                    
                    List(new IncrementInt1,
                         new IncrementInt2,
