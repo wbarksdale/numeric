@@ -25,7 +25,7 @@ final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A)
   def <=>(rhs:A) = n.compare(lhs, rhs)
   def /(rhs:A) = n.div(lhs, rhs)
   def ===(rhs:A) = n.equiv(lhs, rhs)
-  def !==(rhs:A) = !n.equiv(lhs, rhs)
+  def !==(rhs:A) = n.nequiv(lhs, rhs)
   def >(rhs:A) = n.gt(lhs, rhs)
   def >=(rhs:A) = n.gteq(lhs, rhs)
   def <(rhs:A) = n.lt(lhs, rhs)
@@ -38,7 +38,7 @@ final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A)
 
   def <=>~[B:ConvertableFrom](rhs:B) = n.compare(lhs, n.fromType(rhs))
   def ===~[B:ConvertableFrom](rhs:B) = n.equiv(lhs, n.fromType(rhs))
-  def !==~[B:ConvertableFrom](rhs:B) = !n.equiv(lhs, n.fromType(rhs))
+  def !==~[B:ConvertableFrom](rhs:B) = n.nequiv(lhs, n.fromType(rhs))
   def max_[B:ConvertableFrom](rhs:B) = n.max(lhs, n.fromType(rhs))
   def min_[B:ConvertableFrom](rhs:B) = n.min(lhs, n.fromType(rhs))
 
@@ -57,8 +57,6 @@ final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A)
   def toLong() = n.toLong(lhs)
   def toFloat() = n.toFloat(lhs)
   def toDouble() = n.toDouble(lhs)
-
-  override def toString() = n.toString(lhs)
 }
 
 
@@ -78,7 +76,7 @@ final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A)
 final class IntOps(val lhs:Int) {
   def <=>~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.compare(n.fromInt(lhs), rhs)
   def ===~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.equiv(n.fromInt(lhs), rhs)
-  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = !n.equiv(n.fromInt(lhs), rhs)
+  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.nequiv(n.fromInt(lhs), rhs)
   def max_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.max(n.fromInt(lhs), rhs)
   def min_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.min(n.fromInt(lhs), rhs)
   def /~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.div(n.fromInt(lhs), rhs)
@@ -91,13 +89,14 @@ final class IntOps(val lhs:Int) {
   def +~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.plus(n.fromInt(lhs), rhs)
   def *~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.times(n.fromInt(lhs), rhs)
   def **~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.pow(n.fromInt(lhs), rhs)
+  def toNumeric[@specialized(Int,Long,Float,Double) A](implicit n:Numeric[A]) = n.fromInt(lhs)
 }
 
 
 final class LongOps(val lhs:Long) {
   def <=>~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.compare(n.fromLong(lhs), rhs)
   def ===~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.equiv(n.fromLong(lhs), rhs)
-  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = !n.equiv(n.fromLong(lhs), rhs)
+  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.nequiv(n.fromLong(lhs), rhs)
   def max_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.max(n.fromLong(lhs), rhs)
   def min_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.min(n.fromLong(lhs), rhs)
   def /~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.div(n.fromLong(lhs), rhs)
@@ -110,13 +109,14 @@ final class LongOps(val lhs:Long) {
   def +~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.plus(n.fromLong(lhs), rhs)
   def *~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.times(n.fromLong(lhs), rhs)
   def **~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.pow(n.fromLong(lhs), rhs)
+  def toNumeric[@specialized(Int,Long,Float,Double) A](implicit n:Numeric[A]) = n.fromLong(lhs)
 }
 
 
 final class FloatOps(val lhs:Float) {
   def <=>~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.compare(n.fromFloat(lhs), rhs)
   def ===~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.equiv(n.fromFloat(lhs), rhs)
-  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = !n.equiv(n.fromFloat(lhs), rhs)
+  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.nequiv(n.fromFloat(lhs), rhs)
   def max_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.max(n.fromFloat(lhs), rhs)
   def min_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.min(n.fromFloat(lhs), rhs)
   def /~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.div(n.fromFloat(lhs), rhs)
@@ -129,13 +129,14 @@ final class FloatOps(val lhs:Float) {
   def +~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.plus(n.fromFloat(lhs), rhs)
   def *~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.times(n.fromFloat(lhs), rhs)
   def **~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.pow(n.fromFloat(lhs), rhs)
+  def toNumeric[@specialized(Int,Long,Float,Double) A](implicit n:Numeric[A]) = n.fromFloat(lhs)
 }
 
 
 final class DoubleOps(val lhs:Double) {
   def <=>~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.compare(n.fromDouble(lhs), rhs)
   def ===~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.equiv(n.fromDouble(lhs), rhs)
-  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = !n.equiv(n.fromDouble(lhs), rhs)
+  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.nequiv(n.fromDouble(lhs), rhs)
   def max_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.max(n.fromDouble(lhs), rhs)
   def min_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.min(n.fromDouble(lhs), rhs)
   def /~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.div(n.fromDouble(lhs), rhs)
@@ -148,4 +149,5 @@ final class DoubleOps(val lhs:Double) {
   def +~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.plus(n.fromDouble(lhs), rhs)
   def *~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.times(n.fromDouble(lhs), rhs)
   def **~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.pow(n.fromDouble(lhs), rhs)
+  def toNumeric[@specialized(Int,Long,Float,Double) A](implicit n:Numeric[A]) = n.fromDouble(lhs)
 }
