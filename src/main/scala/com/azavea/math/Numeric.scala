@@ -1,6 +1,7 @@
 package com.azavea.math
 
 import scala.math.{abs, min, max, pow}
+import annotation.implicitNotFound
 
 /**
  * @author Erik Osheim
@@ -29,6 +30,7 @@ import scala.math.{abs, min, max, pow}
  * }}}
  * 
  */
+@implicitNotFound(msg = "Cannot find Numeric type class for ${A}")
 trait Numeric[@specialized(Int,Long,Float,Double) A]
 extends ConvertableFrom[A] with ConvertableTo[A] {
 
@@ -68,6 +70,13 @@ extends ConvertableFrom[A] with ConvertableTo[A] {
    * @return `a` == `b`
    */
   def equiv(a:A, b:A):Boolean
+
+  /**
+   * Tests if `a` and `b` are not equivalent.
+   *
+   * @return `a` != `b`
+   */
+  def nequiv(a:A, b:A):Boolean
 
   /**
    * Tests if `a` is greater than `b`.
@@ -237,6 +246,7 @@ extends Numeric[Int] with ConvertableFromInt with ConvertableToInt {
   def minus(a:Int, b:Int): Int = a - b
   def mod(a:Int, b:Int): Int = a % b
   def negate(a:Int): Int = -a
+  def nequiv(a:Int, b:Int): Boolean = a != b
   def one: Int = 1
   def plus(a:Int, b:Int): Int = a + b
   def pow(a:Int, b:Int): Int = scala.math.pow(a, b).toInt
@@ -260,6 +270,7 @@ extends Numeric[Long] with ConvertableFromLong with ConvertableToLong {
   def minus(a:Long, b:Long): Long = a - b
   def mod(a:Long, b:Long): Long = a % b
   def negate(a:Long): Long = -a
+  def nequiv(a:Long, b:Long): Boolean = a != b
   def one: Long = 1L
   def plus(a:Long, b:Long): Long = a + b
   def pow(a:Long, b:Long): Long = scala.math.pow(a, b).toLong
@@ -283,6 +294,7 @@ extends Numeric[Float] with ConvertableFromFloat with ConvertableToFloat {
   def minus(a:Float, b:Float): Float = a - b
   def mod(a:Float, b:Float): Float = a % b
   def negate(a:Float): Float = -a
+  def nequiv(a:Float, b:Float): Boolean = a != b
   def one: Float = 1.0F
   def plus(a:Float, b:Float): Float = a + b
   def pow(a:Float, b:Float): Float = scala.math.pow(a, b).toFloat
@@ -306,6 +318,7 @@ extends Numeric[Double] with ConvertableFromDouble with ConvertableToDouble {
   def minus(a:Double, b:Double): Double = a - b
   def mod(a:Double, b:Double): Double = a % b
   def negate(a:Double): Double = -a
+  def nequiv(a:Double, b:Double): Boolean = a != b
   def one: Double = 1.0
   def plus(a:Double, b:Double): Double = a + b
   def pow(a:Double, b:Double): Double = scala.math.pow(a, b)
@@ -329,6 +342,7 @@ extends Numeric[BigInt] with ConvertableFromBigInt with ConvertableToBigInt {
   def minus(a:BigInt, b:BigInt): BigInt = a - b
   def mod(a:BigInt, b:BigInt): BigInt = a % b
   def negate(a:BigInt): BigInt = -a
+  def nequiv(a:BigInt, b:BigInt): Boolean = a != b
   def one: BigInt = BigInt(1)
   def plus(a:BigInt, b:BigInt): BigInt = a + b
   def pow(a:BigInt, b:BigInt): BigInt = a.pow(b)
@@ -352,6 +366,7 @@ extends Numeric[BigDecimal] with ConvertableFromBigDecimal with ConvertableToBig
   def minus(a:BigDecimal, b:BigDecimal): BigDecimal = a - b
   def mod(a:BigDecimal, b:BigDecimal): BigDecimal = a % b
   def negate(a:BigDecimal): BigDecimal = -a
+  def nequiv(a:BigDecimal, b:BigDecimal): Boolean = a != b
   def one: BigDecimal = BigDecimal(1.0)
   def plus(a:BigDecimal, b:BigDecimal): BigDecimal = a + b
   def pow(a:BigDecimal, b:BigDecimal): BigDecimal = a.pow(b)
