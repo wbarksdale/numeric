@@ -540,10 +540,10 @@ class InfixAdderLong extends InfixAdder with BaseAdderLong { def name = "infix-a
 class InfixAdderFloat extends InfixAdder with BaseAdderFloat { def name = "infix-adder-float" }
 class InfixAdderDouble extends InfixAdder with BaseAdderDouble{ def name = "infix-adder-double" }
 
-class InfixAdder2Int extends InfixAdder2 with BaseAdderInt { def name = "infix-adder-int" }
-class InfixAdder2Long extends InfixAdder2 with BaseAdderLong { def name = "infix-adder-long" }
-class InfixAdder2Float extends InfixAdder2 with BaseAdderFloat { def name = "infix-adder-float" }
-class InfixAdder2Double extends InfixAdder2 with BaseAdderDouble{ def name = "infix-adder-double" }
+class InfixAdder2Int extends InfixAdder2 with BaseAdderInt { def name = "infix-adder2-int" }
+class InfixAdder2Long extends InfixAdder2 with BaseAdderLong { def name = "infix-adder2-long" }
+class InfixAdder2Float extends InfixAdder2 with BaseAdderFloat { def name = "infix-adder2-float" }
+class InfixAdder2Double extends InfixAdder2 with BaseAdderDouble{ def name = "infix-adder2-double" }
 
 // ==========================================================
 trait FindMax extends TestCase {
