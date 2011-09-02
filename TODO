@@ -4,16 +4,7 @@ mutually-undesirable).
 
 Some of these may also be impossible! :)
 
-
-0. Figure out how to make the implicit decorations for inline operators faster
-
-Supposedly escape analysis can optimize away the objects created by the
-implicit decorator pattern but I have yet to see evidence of this when dealing
-with AnyVal types like Int. I don't know how to make this faster, but it is the
-#1 problem with this library (and Numeric in general).
-
-
-1. Implement a c.a.m.NumericRange class in terms of c.a.m.Numeric
+1. Implement a NumericRange class
 
 Paul Phillips has encouraged me to do this. I managed to create something that
 worked but wasn't performing as well as the direct integer ranges. The problem
@@ -21,31 +12,34 @@ seemed to be the difference between the way foo(Int => Unit) and foo[T](T =>
 Unit) are treated. 
 
 
-2. Add BigInt, BigDecimal support
+2. Fix support for user-created types
 
-These probably won't be super fast, but it would be nice to support them.
+Right now the strategy we're using with ConvertableTo/ConvertableFrom doesn't
+scale well when users are adding their own types. This may not actually be a
+big deal, but it'd be nice if the system was more pluggable. Right now if we
+want to provide suport converting to/from "Foo" objects we have to change the
+ConvertableFrom/ConvertableTo traits to include methods "toFoo" and "fromFoo".
+
+I can imagine using ConvertableBetween[A, B] to solve this, but I don't want to
+sacrifice performance to do so. Experimentation necessary.     
 
 
-3. Try creating some kind of complex type
-
-This could be something like case class Complex(real:Double, imag:Double)
-or maybe even something crazier like Complex[T:Numeric](real:T, imag:T)
-
-
-4. Create implicit conversions using toNumeric[T]
+3. Create implicit conversions using toNumeric[T]
 
 This would allow someone to say 3.toNumeric[T] rather than having to get a
 reference to the Numeric instance and say n.fromInt(3).
 
+This is less important now that fuzzy infix operators are working better.
 
-5. Specialize Ordering
+
+4. Specialize Ordering
 
 This is probably too big for this project, but it would be great if Ordering
 were specialized so that Numeric could extend it without taking a huge speed
 hit on things like Numeric.lt().
 
 
-6. Rationalize working with two different numeric types
+5. Rationalize working with two different numeric types
 
 Currently if you have "def complicated[T:Numeric, U:Numeric](t:T, u:U)" you
 will have to do manual conversions to one of those types without being sure
@@ -57,18 +51,18 @@ least say something like "if (n1.morePreciseThan(n2)) ... else ..."
 I'm not sure how often this would be used, but I could imagine it being nice.
 
 
-7. Worry about Hotspot de-inlining in Main.scala
-
-I tried to save some code by using inheritence, but it's possible that this is
-making certain tests run slower (as I found out while writing the IncrementInt*
-family of tests). It would be great to try to make sure that this isn't a
-problem.
+6. Test on more hardware/JVM configurations
 
 
-8. Test on more hardware/JVM configurations
+7. Port tests to one of the newer performance testing frameworks
 
 
-9. Port tests to one of the newer performance testing frameworks
+8. Write more tests
 
 
-10. Write more tests
+9. Figure out how to deal with the "strict" infix operators versus the "fuzzy"
+infix operators. There is a compiler plugin to rewrite both into the faster
+form "n.add(lhs, rhs)" but without that the strict infix operators perform
+better, and also don't fall afoul of StringOps' + method. On the other hand,
+the fuzzy infix operators work better with literals (e.g. 3) and concrete types
+(e.g i:Int). 
