@@ -30,7 +30,7 @@ import annotation.implicitNotFound
  * }}}
  * 
  */
-@implicitNotFound(msg = "Cannot find Numeric type class for ${A}")
+//@implicitNotFound(msg = "Cannot find Numeric type class for ${A}")
 trait Numeric[@specialized(Int,Long,Float,Double) A]
 extends ConvertableFrom[A] with ConvertableTo[A] {
 
@@ -150,7 +150,7 @@ extends ConvertableFrom[A] with ConvertableTo[A] {
    *
    * @return 1
    */
-  def one():A
+  def one:A
 
   /**
    * Returns `a` plus `b`.
@@ -193,7 +193,7 @@ extends ConvertableFrom[A] with ConvertableTo[A] {
    *
    * @return 0
    */
-  def zero():A
+  def zero:A
 
   /**
    * Convert a value `b` of type `B` to type `A`.
@@ -214,6 +214,8 @@ extends ConvertableFrom[A] with ConvertableTo[A] {
    * @return the value of `b` encoded in type `A`
    */
   def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]): A
+
+  def toType[@specialized(Int, Long, Float, Double) B](a:A)(implicit c:ConvertableTo[B]): B
 
   /**
    * Used to get an Ordering[A] instance.
@@ -254,7 +256,7 @@ extends Numeric[Int] with ConvertableFromInt with ConvertableToInt {
   def zero: Int = 0
   
   def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toInt(b)
-  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromInt(b)
+  def toType[@specialized(Int, Long, Float, Double) B](a:Int)(implicit c:ConvertableTo[B]) = c.fromInt(a)
 }
 
 trait LongIsNumeric
@@ -279,7 +281,7 @@ extends Numeric[Long] with ConvertableFromLong with ConvertableToLong {
   def zero: Long = 0L
   
   def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toLong(b)
-  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromLong(b)
+  def toType[@specialized(Int, Long, Float, Double) B](a:Long)(implicit c:ConvertableTo[B]) = c.fromLong(a)
 }
 
 trait FloatIsNumeric
@@ -304,7 +306,7 @@ extends Numeric[Float] with ConvertableFromFloat with ConvertableToFloat {
   def zero: Float = 0.0F
   
   def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toFloat(b)
-  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromFloat(b)
+  def toType[@specialized(Int, Long, Float, Double) B](a:Float)(implicit c:ConvertableTo[B]) = c.fromFloat(a)
 }
 
 trait DoubleIsNumeric
@@ -329,7 +331,7 @@ extends Numeric[Double] with ConvertableFromDouble with ConvertableToDouble {
   def zero: Double = 0.0
   
   def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toDouble(b)
-  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromDouble(b)
+  def toType[@specialized(Int, Long, Float, Double) B](a:Double)(implicit c:ConvertableTo[B]) = c.fromDouble(a)
 }
 
 trait BigIntIsNumeric
@@ -354,7 +356,7 @@ extends Numeric[BigInt] with ConvertableFromBigInt with ConvertableToBigInt {
   def zero: BigInt = BigInt(0)
   
   def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigInt(b)
-  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromBigInt(b)
+  def toType[@specialized(Int, Long, Float, Double) B](a:BigInt)(implicit c:ConvertableTo[B]) = c.fromBigInt(a)
 }
 
 trait BigDecimalIsNumeric
@@ -379,7 +381,7 @@ extends Numeric[BigDecimal] with ConvertableFromBigDecimal with ConvertableToBig
   def zero: BigDecimal = BigDecimal(0.0)
   
   def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigDecimal(b)
-  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromBigDecimal(b)
+  def toType[@specialized(Int, Long, Float, Double) B](a:BigDecimal)(implicit c:ConvertableTo[B]) = c.fromBigDecimal(a)
 }
 
 
@@ -388,14 +390,14 @@ extends Numeric[BigDecimal] with ConvertableFromBigDecimal with ConvertableToBig
  * associating the type class (Numeric) with its member type (Int).
  */
 object Numeric {
-  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]():Numeric[A] = implicitly[Numeric[A]]
-
   implicit object IntIsNumeric extends IntIsNumeric
   implicit object LongIsNumeric extends LongIsNumeric
   implicit object FloatIsNumeric extends FloatIsNumeric
   implicit object DoubleIsNumeric extends DoubleIsNumeric
   implicit object BigIntIsNumeric extends BigIntIsNumeric
   implicit object BigDecimalIsNumeric extends BigDecimalIsNumeric
+
+  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]:Numeric[A] = implicitly[Numeric[A]]
 }
 
 /**
@@ -406,12 +408,40 @@ object Numeric {
  *   import com.azavea.math.Implicits._
  */
 object Implicits {
-  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A):NumericOps[A] = new NumericOps(a)
+  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new NumericOps(a)
 
-  implicit def infixIntOps(i:Int):IntOps = new IntOps(i)
-  implicit def infixLongOps(l:Long):LongOps = new LongOps(l)
-  implicit def infixFloatOps(f:Float):FloatOps = new FloatOps(f)
-  implicit def infixDoubleOps(d:Double):DoubleOps = new DoubleOps(d)
+  implicit def infixIntOps(i:Int) = new IntOps(i)
+  implicit def infixLongOps(l:Long) = new LongOps(l)
+  implicit def infixFloatOps(f:Float) = new FloatOps(f)
+  implicit def infixDoubleOps(d:Double) = new DoubleOps(d)
+  implicit def infixBigIntOps(f:BigInt) = new BigIntOps(f)
+  implicit def infixBigDecimalOps(d:BigDecimal) = new BigDecimalOps(d)
 
-  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]():Numeric[A] = implicitly[Numeric[A]]
+  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]:Numeric[A] = implicitly[Numeric[A]]
+}
+
+object FastImplicits {
+  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new FastNumericOps(a)
+
+  implicit def infixIntOps(i:Int) = new LiteralIntOps(i)
+  implicit def infixLongOps(l:Long) = new LiteralLongOps(l)
+  implicit def infixFloatOps(f:Float) = new LiteralFloatOps(f)
+  implicit def infixDoubleOps(d:Double) = new LiteralDoubleOps(d)
+  implicit def infixBigIntOps(f:BigInt) = new LiteralBigIntOps(f)
+  implicit def infixBigDecimalOps(d:BigDecimal) = new LiteralBigDecimalOps(d)
+
+  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]:Numeric[A] = implicitly[Numeric[A]]  
+}
+
+object EasyImplicits {
+  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new EasyNumericOps(a)
+
+  implicit def infixIntOps(i:Int) = new LiteralIntOps(i)
+  implicit def infixLongOps(l:Long) = new LiteralLongOps(l)
+  implicit def infixFloatOps(f:Float) = new LiteralFloatOps(f)
+  implicit def infixDoubleOps(d:Double) = new LiteralDoubleOps(d)
+  implicit def infixBigIntOps(f:BigInt) = new LiteralBigIntOps(f)
+  implicit def infixBigDecimalOps(d:BigDecimal) = new LiteralBigDecimalOps(d)
+
+  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]:Numeric[A] = implicitly[Numeric[A]]  
 }
