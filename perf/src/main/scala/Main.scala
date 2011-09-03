@@ -1,5 +1,3 @@
-package com.azavea.math
-
 import scala.math.max
 import scala.math.{Numeric => OldNumeric, Integral, Fractional, min, max}
 import scala.util.Random
@@ -9,8 +7,16 @@ import java.io.{FileWriter, PrintWriter}
 
 import Console.printf
 
+import com.azavea.math.Numeric
+//import com.azavea.math.Implicits._
 
-import Implicits._
+import com.azavea.math.EasyImplicits._
+//import com.azavea.math.FastImplicits._
+import Predef.{any2stringadd => _, _}
+
+object Duh {
+  val s = "foo" + 3
+}
 
 // define some constant sizes and random arrays that we can use for our various
 // performance tests. if things run way too slow or way too fast you can try
@@ -181,6 +187,7 @@ trait FromIntToX extends TestCase {
     var i = 0
     while (i < a.length) {
       b(i) = numeric.fromInt(a(i))
+      //b(i) = numeric.from[Int](a(i))
       i += 1
     }
     b
@@ -198,28 +205,28 @@ trait FromIntToX extends TestCase {
   }
 }
 
-class FromIntToInt extends FromIntToX {
+final class FromIntToInt extends FromIntToX {
   def name = "from-int-to-int"
   def direct() = Option(directToInt(largeIntArray))
   def newGeneric() = Option(newFromInts[Int](largeIntArray))
   def oldGeneric() = Option(oldFromInts[Int](largeIntArray))
 }
 
-class FromIntToLong extends FromIntToX {
+final class FromIntToLong extends FromIntToX {
   def name = "from-int-to-long"
   def direct() = Option(directToLong(largeIntArray))
   def newGeneric() = Option(newFromInts[Long](largeIntArray))
   def oldGeneric() = Option(oldFromInts[Long](largeIntArray))
 }
 
-class FromIntToFloat extends FromIntToX {
+final class FromIntToFloat extends FromIntToX {
   def name = "from-int-to-float"
   def direct() = Option(directToFloat(largeIntArray))
   def newGeneric() = Option(newFromInts[Float](largeIntArray))
   def oldGeneric() = Option(oldFromInts[Float](largeIntArray))
 }
 
-class FromIntToDouble extends FromIntToX {
+final class FromIntToDouble extends FromIntToX {
   def name = "from-int-to-double"
   def direct() = Option(directToDouble(largeIntArray))
   def newGeneric() = Option(newFromInts[Double](largeIntArray))
@@ -294,10 +301,10 @@ trait Adder extends BaseAdder {
   def oldAdder[A](a:A, b:A)(implicit m:OldNumeric[A]): A = m.plus(a, b)
 }
 
-class AdderInt extends Adder with BaseAdderInt { def name = "adder-int" }
-class AdderLong extends Adder with BaseAdderLong { def name = "adder-long" }
-class AdderFloat extends Adder with BaseAdderFloat { def name = "adder-float" }
-class AdderDouble extends Adder with BaseAdderDouble{ def name = "adder-double" }
+final class AdderInt extends Adder with BaseAdderInt { def name = "adder-int" }
+final class AdderLong extends Adder with BaseAdderLong { def name = "adder-long" }
+final class AdderFloat extends Adder with BaseAdderFloat { def name = "adder-float" }
+final class AdderDouble extends Adder with BaseAdderDouble{ def name = "adder-double" }
 
 
 // =====================================================
@@ -446,28 +453,28 @@ trait ArrayAdder extends BaseArrayOps {
   def oldArrayOp[A](a:A, b:A)(implicit m:OldNumeric[A]) = m.plus(a, b)
 }
 
-class IntArrayAdder extends ArrayAdder {
+final class IntArrayAdder extends ArrayAdder {
   def name = "array-total-int"
   def direct() = Option(directIntArrayOps(largeIntArray))
   def newGeneric() = Option(newArrayOps(largeIntArray))
   def oldGeneric() = Option(oldArrayOps(largeIntArray))
 }
 
-class LongArrayAdder extends ArrayAdder {
+final class LongArrayAdder extends ArrayAdder {
   def name = "array-total-long"
   def direct() = Option(directLongArrayOps(largeLongArray))
   def newGeneric() = Option(newArrayOps(largeLongArray))
   def oldGeneric() = Option(oldArrayOps(largeLongArray))
 }
 
-class FloatArrayAdder extends ArrayAdder {
+final class FloatArrayAdder extends ArrayAdder {
   def name = "array-total-float"
   def direct() = Option(directFloatArrayOps(largeFloatArray))
   def newGeneric() = Option(newArrayOps(largeFloatArray))
   def oldGeneric() = Option(oldArrayOps(largeFloatArray))
 }
 
-class DoubleArrayAdder extends ArrayAdder {
+final class DoubleArrayAdder extends ArrayAdder {
   def name = "array-total-double"
   def direct() = Option(directDoubleArrayOps(largeDoubleArray))
   def newGeneric() = Option(newArrayOps(largeDoubleArray))
@@ -488,28 +495,28 @@ trait ArrayRescale extends BaseArrayMapOps {
   def oldArrayOp[A](b:A)(implicit m:OldNumeric[A]) = m.fromInt((m.toDouble(b) * 5.0 / 3.0).toInt)
 }
 
-class IntArrayRescale extends ArrayRescale {
+final class IntArrayRescale extends ArrayRescale {
   def name = "array-rescale-int"
   def direct() = Option(directIntArrayOps(largeIntArray))
   def newGeneric() = Option(newArrayOps(largeIntArray))
   def oldGeneric() = Option(oldArrayOps(largeIntArray))
 }
 
-class LongArrayRescale extends ArrayRescale {
+final class LongArrayRescale extends ArrayRescale {
   def name = "array-rescale-long"
   def direct() = Option(directLongArrayOps(largeLongArray))
   def newGeneric() = Option(newArrayOps(largeLongArray))
   def oldGeneric() = Option(oldArrayOps(largeLongArray))
 }
 
-class FloatArrayRescale extends ArrayRescale {
+final class FloatArrayRescale extends ArrayRescale {
   def name = "array-rescale-float"
   def direct() = Option(directFloatArrayOps(largeFloatArray))
   def newGeneric() = Option(newArrayOps(largeFloatArray))
   def oldGeneric() = Option(oldArrayOps(largeFloatArray))
 }
 
-class DoubleArrayRescale extends ArrayRescale {
+final class DoubleArrayRescale extends ArrayRescale {
   def name = "array-rescale-double"
   def direct() = Option(directDoubleArrayOps(largeDoubleArray))
   def newGeneric() = Option(newArrayOps(largeDoubleArray))
@@ -528,22 +535,23 @@ trait InfixAdder extends BaseAdder {
 }
 
 trait InfixAdder2 extends BaseAdder {
-  def newAdder[@specialized A:Numeric](a:A, b:A): A = a +~ b
+  //def newAdder[@specialized A:Numeric](a:A, b:A): A = a +~ b
+  def newAdder[@specialized A:Numeric](a:A, b:A): A = a + b
   def oldAdder[A](a:A, b:A)(implicit m:OldNumeric[A]): A = {
     import m._
     a + b
   }
 }
 
-class InfixAdderInt extends InfixAdder with BaseAdderInt { def name = "infix-adder-int" }
-class InfixAdderLong extends InfixAdder with BaseAdderLong { def name = "infix-adder-long" }
-class InfixAdderFloat extends InfixAdder with BaseAdderFloat { def name = "infix-adder-float" }
-class InfixAdderDouble extends InfixAdder with BaseAdderDouble{ def name = "infix-adder-double" }
+final class InfixAdderInt extends InfixAdder with BaseAdderInt { def name = "infix-adder-int" }
+final class InfixAdderLong extends InfixAdder with BaseAdderLong { def name = "infix-adder-long" }
+final class InfixAdderFloat extends InfixAdder with BaseAdderFloat { def name = "infix-adder-float" }
+final class InfixAdderDouble extends InfixAdder with BaseAdderDouble{ def name = "infix-adder-double" }
 
-class InfixAdder2Int extends InfixAdder2 with BaseAdderInt { def name = "infix-adder2-int" }
-class InfixAdder2Long extends InfixAdder2 with BaseAdderLong { def name = "infix-adder2-long" }
-class InfixAdder2Float extends InfixAdder2 with BaseAdderFloat { def name = "infix-adder2-float" }
-class InfixAdder2Double extends InfixAdder2 with BaseAdderDouble{ def name = "infix-adder2-double" }
+final class InfixAdder2Int extends InfixAdder2 with BaseAdderInt { def name = "infix-adder2-int" }
+final class InfixAdder2Long extends InfixAdder2 with BaseAdderLong { def name = "infix-adder2-long" }
+final class InfixAdder2Float extends InfixAdder2 with BaseAdderFloat { def name = "infix-adder2-float" }
+final class InfixAdder2Double extends InfixAdder2 with BaseAdderDouble{ def name = "infix-adder2-double" }
 
 // ==========================================================
 trait FindMax extends TestCase {
@@ -591,28 +599,28 @@ trait FindMax extends TestCase {
   }
 }
 
-class FindMaxInt extends FindMax {
+final class FindMaxInt extends FindMax {
   def name = "find-max-int"
   def direct() = Some(directMaxInt(largeIntArray))
   def newGeneric() = Some(newGenericMax(largeIntArray))
   def oldGeneric() = Some(oldGenericMax(largeIntArray))
 }
 
-class FindMaxLong extends FindMax {
+final class FindMaxLong extends FindMax {
   def name = "find-max-long"
   def direct() = Some(directMaxLong(largeLongArray))
   def newGeneric() = Some(newGenericMax(largeLongArray))
   def oldGeneric() = Some(oldGenericMax(largeLongArray))
 }
 
-class FindMaxFloat extends FindMax {
+final class FindMaxFloat extends FindMax {
   def name = "find-max-float"
   def direct() = Some(directMaxFloat(largeFloatArray))
   def newGeneric() = Some(newGenericMax(largeFloatArray))
   def oldGeneric() = Some(oldGenericMax(largeFloatArray))
 }
 
-class FindMaxDouble extends FindMax {
+final class FindMaxDouble extends FindMax {
   def name = "find-max-double"
   def direct() = Some(directMaxDouble(largeDoubleArray))
   def newGeneric() = Some(newGenericMax(largeDoubleArray))
@@ -656,28 +664,28 @@ trait Quicksort extends BaseSort {
   def oldGenericSorter[A:OldNumeric:Manifest](a:Array[A]) = { val d = a.clone; scala.util.Sorting.quickSort(d); d }
 }
 
-class QuicksortInt extends Quicksort {
+final class QuicksortInt extends Quicksort {
   def name = "quicksort-int"
   def direct() = directInt(mediumIntArray)
   def newGeneric() = newGenericSort(mediumIntArray)
   def oldGeneric() = oldGenericSort(mediumIntArray)
 }
 
-class QuicksortLong extends Quicksort {
+final class QuicksortLong extends Quicksort {
   def name = "quicksort-long"
   def direct() = directLong(mediumLongArray)
   def newGeneric() = newGenericSort(mediumLongArray)
   def oldGeneric() = oldGenericSort(mediumLongArray)
 }
 
-class QuicksortFloat extends Quicksort {
+final class QuicksortFloat extends Quicksort {
   def name = "quicksort-float"
   def direct() = directFloat(mediumFloatArray)
   def newGeneric() = newGenericSort(mediumFloatArray)
   def oldGeneric() = oldGenericSort(mediumFloatArray)
 }
 
-class QuicksortDouble extends Quicksort {
+final class QuicksortDouble extends Quicksort {
   def name = "quicksort-double"
   def direct() = directDouble(mediumDoubleArray)
   def newGeneric() = newGenericSort(mediumDoubleArray)
@@ -793,28 +801,28 @@ trait InsertionSort extends BaseSort {
   }  
 }
 
-class InsertionSortInt extends InsertionSort {
+final class InsertionSortInt extends InsertionSort {
   def name = "insertion-sort-int"
   def direct() = directInt(tinyIntArray)
   def newGeneric() = newGenericSort(tinyIntArray)
   def oldGeneric() = oldGenericSort(tinyIntArray)
 }
 
-class InsertionSortLong extends InsertionSort {
+final class InsertionSortLong extends InsertionSort {
   def name = "insertion-sort-long"
   def direct() = directLong(tinyLongArray)
   def newGeneric() = newGenericSort(tinyLongArray)
   def oldGeneric() = oldGenericSort(tinyLongArray)
 }
 
-class InsertionSortFloat extends InsertionSort {
+final class InsertionSortFloat extends InsertionSort {
   def name = "insertion-sort-float"
   def direct() = directFloat(tinyFloatArray)
   def newGeneric() = newGenericSort(tinyFloatArray)
   def oldGeneric() = oldGenericSort(tinyFloatArray)
 }
 
-class InsertionSortDouble extends InsertionSort {
+final class InsertionSortDouble extends InsertionSort {
   def name = "insertion-sort-double"
   def direct() = directDouble(tinyDoubleArray)
   def newGeneric() = newGenericSort(tinyDoubleArray)
@@ -867,28 +875,28 @@ trait ArrayAllocator extends TestCase {
   }
 }
 
-class ArrayAllocatorInt extends ArrayAllocator {
+final class ArrayAllocatorInt extends ArrayAllocator {
   def name = "array-allocator-int"
   def direct = Option(directIntAllocator(mediumSize, 5, 13))
   def newGeneric = Option(newAllocator(mediumSize, 5, 13))
   def oldGeneric = Option(oldAllocator(mediumSize, 5, 13))
 }
 
-class ArrayAllocatorLong extends ArrayAllocator {
+final class ArrayAllocatorLong extends ArrayAllocator {
   def name = "array-allocator-long"
   def direct = Option(directLongAllocator(mediumSize, 5, 13L))
   def newGeneric = Option(newAllocator(mediumSize, 5, 13L))
   def oldGeneric = Option(oldAllocator(mediumSize, 5, 13L))
 }
 
-class ArrayAllocatorFloat extends ArrayAllocator {
+final class ArrayAllocatorFloat extends ArrayAllocator {
   def name = "array-allocator-float"
   def direct = Option(directFloatAllocator(mediumSize, 5, 13.0F))
   def newGeneric = Option(newAllocator(mediumSize, 5, 13.0F))
   def oldGeneric = Option(oldAllocator(mediumSize, 5, 13.0F))
 }
 
-class ArrayAllocatorDouble extends ArrayAllocator {
+final class ArrayAllocatorDouble extends ArrayAllocator {
   def name = "array-allocator-double"
   def direct = Option(directDoubleAllocator(mediumSize, 5, 13.0))
   def newGeneric = Option(newAllocator(mediumSize, 5, 13.0))
@@ -1080,28 +1088,28 @@ trait MergeSort extends BaseSort {
   }
 }
 
-class MergeSortInt extends MergeSort {
+final class MergeSortInt extends MergeSort {
   def name = "merge-sort-int"
   def direct() = { val a = mediumIntArray.clone; directInt(a); Some(a) }
   def newGeneric() = { val a = mediumIntArray.clone; newGenericSort(a); Some(a) }
   def oldGeneric() = { val a = mediumIntArray.clone; oldGenericSort(a); Some(a) }
 }
 
-class MergeSortLong extends MergeSort {
+final class MergeSortLong extends MergeSort {
   def name = "merge-sort-long"
   def direct() = { val a = mediumLongArray.clone; directLong(a); Some(a) }
   def newGeneric() = { val a = mediumLongArray; newGenericSort(a); Some(a) }
   def oldGeneric() = { val a = mediumLongArray; oldGenericSort(a); Some(a) }
 }
 
-class MergeSortFloat extends MergeSort {
+final class MergeSortFloat extends MergeSort {
   def name = "merge-sort-float"
   def direct() = { val a = mediumFloatArray; directFloat(a); Some(a) }
   def newGeneric() = { val a = mediumFloatArray; newGenericSort(a); Some(a) }
   def oldGeneric() = { val a = mediumFloatArray; oldGenericSort(a); Some(a) }
 }
 
-class MergeSortDouble extends MergeSort {
+final class MergeSortDouble extends MergeSort {
   def name = "merge-sort-double"
   def direct() = { val a = mediumDoubleArray; directDouble(a); Some(a) }
   def newGeneric() = { val a = mediumDoubleArray; newGenericSort(a); Some(a) }
@@ -1110,7 +1118,7 @@ class MergeSortDouble extends MergeSort {
 
 
 // =================================================================
-class IncrementInt1 extends TestCase {
+final class IncrementInt1 extends TestCase {
   def name = "increment-int1"
 
   def directIncrement(x:Int) = x + 100
@@ -1147,7 +1155,7 @@ class IncrementInt1 extends TestCase {
   }
 }
 
-class IncrementInt2 extends TestCase {
+final class IncrementInt2 extends TestCase {
   def name = "increment-int2"
 
   def directIncrement(x:Int) = x + 100
@@ -1161,7 +1169,8 @@ class IncrementInt2 extends TestCase {
     Some(total)
   }
 
-  def newIncrement[@specialized A:Numeric](a:A):A = a +~ numeric.fromInt(100)
+  //def newIncrement[@specialized A:Numeric](a:A):A = a +~ numeric.fromInt(100)
+  def newIncrement[@specialized A:Numeric](a:A):A = a + numeric.fromInt(100)
   def newGeneric() = {
     var i = 0
     var total = 0
@@ -1184,7 +1193,7 @@ class IncrementInt2 extends TestCase {
   }
 }
 
-class IncrementInt3 extends TestCase {
+final class IncrementInt3 extends TestCase {
   def name = "increment-int3"
 
   def directIncrement(x:Int) = x + 100
@@ -1198,7 +1207,9 @@ class IncrementInt3 extends TestCase {
     Some(total)
   }
 
-  def newIncrement[@specialized A:Numeric](a:A):A = a +~ 100
+  //def newIncrement[@specialized A:Numeric](a:A):A = a + numeric.fromInt(100)
+  //def newIncrement[@specialized A:Numeric](a:A):A = a +~ 100
+  def newIncrement[@specialized A:Numeric](a:A):A = a + 100
   def newGeneric() = {
     var i = 0
     var total = 0
@@ -1221,7 +1232,7 @@ class IncrementInt3 extends TestCase {
   }
 }
 
-class IncrementInt4 extends TestCase {
+final class IncrementInt4 extends TestCase {
   def name = "increment-int4"
 
   def directIncrement(x:Int) = x + 100
@@ -1235,7 +1246,8 @@ class IncrementInt4 extends TestCase {
     Some(total)
   }
 
-  def newIncrement[@specialized A:Numeric](a:A):A = 100 +~ a
+  //def newIncrement[@specialized A:Numeric](a:A):A = 100 +~ a
+  def newIncrement[@specialized A:Numeric](a:A):A = 100 + a
   def newGeneric() = {
     var i = 0
     var total = 0
@@ -1265,45 +1277,45 @@ object Main {
                         new FromIntToFloat,
                         new FromIntToDouble),
                    
-                   List(new AdderInt,
-                        new AdderLong,
-                        new AdderFloat,
-                        new AdderDouble),
+                   // List(new AdderInt,
+                   //      new AdderLong,
+                   //      new AdderFloat,
+                   //      new AdderDouble),
                    
-                   List(new IntArrayAdder,
-                        new LongArrayAdder,
-                        new FloatArrayAdder,
-                        new DoubleArrayAdder),
+                   // List(new IntArrayAdder,
+                   //      new LongArrayAdder,
+                   //      new FloatArrayAdder,
+                   //      new DoubleArrayAdder),
                    
-                   List(new IntArrayRescale,
-                        new LongArrayRescale,
-                        new FloatArrayRescale,
-                        new DoubleArrayRescale),
+                   // List(new IntArrayRescale,
+                   //      new LongArrayRescale,
+                   //      new FloatArrayRescale,
+                   //      new DoubleArrayRescale),
                    
-                   List(new FindMaxInt,
-                        new FindMaxLong,
-                        new FindMaxFloat,
-                        new FindMaxDouble),
+                   // List(new FindMaxInt,
+                   //      new FindMaxLong,
+                   //      new FindMaxFloat,
+                   //      new FindMaxDouble),
                    
-                   List(new QuicksortInt,
-                        new QuicksortLong,
-                        new QuicksortFloat,
-                        new QuicksortDouble),
+                   // List(new QuicksortInt,
+                   //      new QuicksortLong,
+                   //      new QuicksortFloat,
+                   //      new QuicksortDouble),
                    
-                   List(new ArrayAllocatorInt,
-                        new ArrayAllocatorLong,
-                        new ArrayAllocatorFloat,
-                        new ArrayAllocatorDouble),
+                   // List(new ArrayAllocatorInt,
+                   //      new ArrayAllocatorLong,
+                   //      new ArrayAllocatorFloat,
+                   //      new ArrayAllocatorDouble),
                    
-                   List(new InsertionSortInt,
-                        new InsertionSortLong,
-                        new InsertionSortFloat,
-                        new InsertionSortDouble),
+                   // List(new InsertionSortInt,
+                   //      new InsertionSortLong,
+                   //      new InsertionSortFloat,
+                   //      new InsertionSortDouble),
                    
-                   List(new MergeSortInt,
-                        new MergeSortLong,
-                        new MergeSortFloat,
-                        new MergeSortDouble),
+                   // List(new MergeSortInt,
+                   //      new MergeSortLong,
+                   //      new MergeSortFloat,
+                   //      new MergeSortDouble),
                    
                    List(new InfixAdderInt,
                         new InfixAdderLong,

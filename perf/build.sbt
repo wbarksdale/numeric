@@ -1,11 +1,8 @@
 // project name
-name := "Numeric"
+name := "Numeric Performance Test"
 
 // shrug?
 version := "0.1"
-
-// test
-libraryDependencies += "org.scalatest" % "scalatest_2.9.0" % "1.6.1"
 
 // hide backup files
 defaultExcludes ~= (filter => filter || "*~")

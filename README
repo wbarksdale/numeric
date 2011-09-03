@@ -1,6 +1,6 @@
-This is a package I've built to show some basic improvements in speed we can
+This is a package I've built to show what improvements in speed we can
 get with a better Numeric trait. It features specialization among other
-improvements and it can be used productively right now. 
+improvements and it can be used productively right now.
 
 Soon I hope to release this as an independent jar that people can plug in to
 do fast generic math, and eventually I hope to get code like this integrated
