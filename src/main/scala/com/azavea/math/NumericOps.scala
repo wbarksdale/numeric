@@ -23,7 +23,6 @@ final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A)
   def signum() = n.signum(lhs)
 
   def <=>(rhs:A) = n.compare(lhs, rhs)
-  def /(rhs:A) = n.div(lhs, rhs)
   def ===(rhs:A) = n.equiv(lhs, rhs)
   def !==(rhs:A) = n.nequiv(lhs, rhs)
   def >(rhs:A) = n.gt(lhs, rhs)
@@ -68,9 +67,6 @@ final class NumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A)
  * generic types. For instance:
  *
  *   def foo[A:Numeric](a:A, b:Int) = (a *~ b) +~ 1
- *
- * This isn't possible with the "normal" operators due to the fact that
- * Int.+ is already defined (as well as the fact that StringOps uses +).
  */
 
 final class IntOps(val lhs:Int) {
@@ -150,4 +146,44 @@ final class DoubleOps(val lhs:Double) {
   def *~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.times(n.fromDouble(lhs), rhs)
   def **~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.pow(n.fromDouble(lhs), rhs)
   def toNumeric[@specialized(Int,Long,Float,Double) A](implicit n:Numeric[A]) = n.fromDouble(lhs)
+}
+
+
+final class BigIntOps(val lhs:BigInt) {
+  def <=>~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.compare(n.fromBigInt(lhs), rhs)
+  def ===~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.equiv(n.fromBigInt(lhs), rhs)
+  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.nequiv(n.fromBigInt(lhs), rhs)
+  def max_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.max(n.fromBigInt(lhs), rhs)
+  def min_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.min(n.fromBigInt(lhs), rhs)
+  def /~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.div(n.fromBigInt(lhs), rhs)
+  def >~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.gt(n.fromBigInt(lhs), rhs)
+  def >=~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.gteq(n.fromBigInt(lhs), rhs)
+  def <~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.lt(n.fromBigInt(lhs), rhs)
+  def <=~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.lteq(n.fromBigInt(lhs), rhs)
+  def -~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.minus(n.fromBigInt(lhs), rhs)
+  def %~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.mod(n.fromBigInt(lhs), rhs)
+  def +~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.plus(n.fromBigInt(lhs), rhs)
+  def *~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.times(n.fromBigInt(lhs), rhs)
+  def **~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.pow(n.fromBigInt(lhs), rhs)
+  def toNumeric[@specialized(Int,Long,Float,Double) A](implicit n:Numeric[A]) = n.fromBigInt(lhs)
+}
+
+
+final class BigDecimalOps(val lhs:BigDecimal) {
+  def <=>~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.compare(n.fromBigDecimal(lhs), rhs)
+  def ===~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.equiv(n.fromBigDecimal(lhs), rhs)
+  def !==~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.nequiv(n.fromBigDecimal(lhs), rhs)
+  def max_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.max(n.fromBigDecimal(lhs), rhs)
+  def min_[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.min(n.fromBigDecimal(lhs), rhs)
+  def /~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.div(n.fromBigDecimal(lhs), rhs)
+  def >~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.gt(n.fromBigDecimal(lhs), rhs)
+  def >=~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.gteq(n.fromBigDecimal(lhs), rhs)
+  def <~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.lt(n.fromBigDecimal(lhs), rhs)
+  def <=~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.lteq(n.fromBigDecimal(lhs), rhs)
+  def -~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.minus(n.fromBigDecimal(lhs), rhs)
+  def %~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.mod(n.fromBigDecimal(lhs), rhs)
+  def +~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.plus(n.fromBigDecimal(lhs), rhs)
+  def *~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.times(n.fromBigDecimal(lhs), rhs)
+  def **~[@specialized(Int,Long,Float,Double) A](rhs:A)(implicit n:Numeric[A]) = n.pow(n.fromBigDecimal(lhs), rhs)
+  def toNumeric[@specialized(Int,Long,Float,Double) A](implicit n:Numeric[A]) = n.fromBigDecimal(lhs)
 }

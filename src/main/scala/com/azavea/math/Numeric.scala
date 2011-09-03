@@ -213,7 +213,7 @@ extends ConvertableFrom[A] with ConvertableTo[A] {
    * 
    * @return the value of `b` encoded in type `A`
    */
-  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]): A
+  def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]): A
 
   /**
    * Used to get an Ordering[A] instance.
@@ -253,7 +253,8 @@ extends Numeric[Int] with ConvertableFromInt with ConvertableToInt {
   def times(a:Int, b:Int): Int = a * b
   def zero: Int = 0
   
-  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toInt(b)
+  def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toInt(b)
+  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromInt(b)
 }
 
 trait LongIsNumeric
@@ -277,7 +278,8 @@ extends Numeric[Long] with ConvertableFromLong with ConvertableToLong {
   def times(a:Long, b:Long): Long = a * b
   def zero: Long = 0L
   
-  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toLong(b)
+  def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toLong(b)
+  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromLong(b)
 }
 
 trait FloatIsNumeric
@@ -301,7 +303,8 @@ extends Numeric[Float] with ConvertableFromFloat with ConvertableToFloat {
   def times(a:Float, b:Float): Float = a * b
   def zero: Float = 0.0F
   
-  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toFloat(b)
+  def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toFloat(b)
+  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromFloat(b)
 }
 
 trait DoubleIsNumeric
@@ -325,7 +328,8 @@ extends Numeric[Double] with ConvertableFromDouble with ConvertableToDouble {
   def times(a:Double, b:Double): Double = a * b
   def zero: Double = 0.0
   
-  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toDouble(b)
+  def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toDouble(b)
+  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromDouble(b)
 }
 
 trait BigIntIsNumeric
@@ -349,7 +353,8 @@ extends Numeric[BigInt] with ConvertableFromBigInt with ConvertableToBigInt {
   def times(a:BigInt, b:BigInt): BigInt = a * b
   def zero: BigInt = BigInt(0)
   
-  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigInt(b)
+  def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigInt(b)
+  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromBigInt(b)
 }
 
 trait BigDecimalIsNumeric
@@ -373,7 +378,8 @@ extends Numeric[BigDecimal] with ConvertableFromBigDecimal with ConvertableToBig
   def times(a:BigDecimal, b:BigDecimal): BigDecimal = a * b
   def zero: BigDecimal = BigDecimal(0.0)
   
-  def fromType[@specialized B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigDecimal(b)
+  def fromType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableFrom[B]) = c.toBigDecimal(b)
+  def toType[@specialized(Int, Long, Float, Double) B](b:B)(implicit c:ConvertableTo[B]) = c.fromBigDecimal(b)
 }
 
 
@@ -388,6 +394,8 @@ object Numeric {
   implicit object LongIsNumeric extends LongIsNumeric
   implicit object FloatIsNumeric extends FloatIsNumeric
   implicit object DoubleIsNumeric extends DoubleIsNumeric
+  implicit object BigIntIsNumeric extends BigIntIsNumeric
+  implicit object BigDecimalIsNumeric extends BigDecimalIsNumeric
 }
 
 /**
