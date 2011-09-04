@@ -24,22 +24,14 @@ I can imagine using ConvertableBetween[A, B] to solve this, but I don't want to
 sacrifice performance to do so. Experimentation necessary.     
 
 
-3. Create implicit conversions using toNumeric[T]
-
-This would allow someone to say 3.toNumeric[T] rather than having to get a
-reference to the Numeric instance and say n.fromInt(3).
-
-This is less important now that fuzzy infix operators are working better.
-
-
-4. Specialize Ordering
+3. Specialize Ordering
 
 This is probably too big for this project, but it would be great if Ordering
 were specialized so that Numeric could extend it without taking a huge speed
 hit on things like Numeric.lt().
 
 
-5. Rationalize working with two different numeric types
+4. Rationalize working with two different numeric types
 
 Currently if you have "def complicated[T:Numeric, U:Numeric](t:T, u:U)" you
 will have to do manual conversions to one of those types without being sure
@@ -51,16 +43,16 @@ least say something like "if (n1.morePreciseThan(n2)) ... else ..."
 I'm not sure how often this would be used, but I could imagine it being nice.
 
 
-6. Test on more hardware/JVM configurations
+5. Test on more hardware/JVM configurations
 
 
-7. Port tests to one of the newer performance testing frameworks
+6. Port tests to one of the newer performance testing frameworks
 
 
-8. Write more tests
+7. Write more tests
 
 
-9. Figure out how to deal with the "strict" infix operators versus the "fuzzy"
+8. Figure out how to deal with the "strict" infix operators versus the "fuzzy"
 infix operators. There is a compiler plugin to rewrite both into the faster
 form "n.add(lhs, rhs)" but without that the strict infix operators perform
 better, and also don't fall afoul of StringOps' + method. On the other hand,
