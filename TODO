@@ -70,3 +70,20 @@ user's code could automatically get the gains of specialization without having
 to annotate every single function manually.
 
 I'm not sure if this would actually work, but it'd be worth looking into.
+
+
+10. Think about how to support other math functions
+
+Right now there are still some functions (sqrt and others from scala.math)
+which aren't defined directly on the types. This is bad, because when you need
+to use these functions you end up either calling toDouble (and thus breaking
+support for BigDecimal and friends) or you call toBigDecimal (and slow things
+down for your fast primitive types). We could define these functions to all
+return T, but then you'd have no way of getting a fractional sqrt() when using
+Ints. 
+
+This gets back to the issues with the lack of a numeric tower. When taking the
+sqrt of an Int we probably want to get back a Double, but when taking the sqrt
+of a BigInt we probably want a BigDecimal. I don't see any easy way of dealing
+with it, but I may not be creative enough. At various points I've had quixotic
+visions of a compiler plugin that could "figure it out"... 
