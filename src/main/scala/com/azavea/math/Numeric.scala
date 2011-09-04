@@ -19,7 +19,7 @@ import annotation.implicitNotFound
  *
  * @example {{{
  *   import demo.Numeric
- *   import demo.Numeric.infixNumericOps
+ *   import demo.Numeric.FastImplicits._
  *
  *   def pythagoreanTheorem[T:Numeric](a:T, b:T): Double = {
  *     val c = (a * a) + (b * b)
@@ -401,7 +401,7 @@ object Numeric {
 }
 
 object FastImplicits {
-  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new FastNumericOps(a)
+  implicit def infixOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new FastNumericOps(a)
 
   implicit def infixIntOps(i:Int) = new LiteralIntOps(i)
   implicit def infixLongOps(l:Long) = new LiteralLongOps(l)
@@ -414,7 +414,7 @@ object FastImplicits {
 }
 
 object EasyImplicits {
-  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new EasyNumericOps(a)
+  implicit def infixOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new EasyNumericOps(a)
 
   implicit def infixIntOps(i:Int) = new LiteralIntOps(i)
   implicit def infixLongOps(l:Long) = new LiteralLongOps(l)
