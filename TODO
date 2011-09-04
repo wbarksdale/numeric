@@ -20,8 +20,10 @@ big deal, but it'd be nice if the system was more pluggable. Right now if we
 want to provide suport converting to/from "Foo" objects we have to change the
 ConvertableFrom/ConvertableTo traits to include methods "toFoo" and "fromFoo".
 
-I can imagine using ConvertableBetween[A, B] to solve this, but I don't want to
-sacrifice performance to do so. Experimentation necessary.     
+I can imagine using something like ConvertableBetween[A, B] to solve this, but
+I don't want to sacrifice performance to do so. Experimentation necessary.
+See https://github.com/nuttycom/salt/commits/master/src/main/scala/com/nommit/salt/Bijection.scala
+for ideas.
 
 
 3. Specialize Ordering
@@ -58,3 +60,13 @@ form "n.add(lhs, rhs)" but without that the strict infix operators perform
 better, and also don't fall afoul of StringOps' + method. On the other hand,
 the fuzzy infix operators work better with literals (e.g. 3) and concrete types
 (e.g i:Int). 
+
+
+9. Add "auto-specialization" to the compiler plugin
+
+I can imagine creating a type alias for Numeric ("SNumeric") and then
+making the compiler plugin automatically specialize any uses of it. This way a
+user's code could automatically get the gains of specialization without having
+to annotate every single function manually.
+
+I'm not sure if this would actually work, but it'd be worth looking into.

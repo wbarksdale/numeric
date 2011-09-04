@@ -3,7 +3,8 @@ NUMERIC
 
 This package (com.azavea.math.Numeric) is based on scala.math.Numeric, which is
 a type trait designed to allow abstraction across numeric types (e.g. Int,
-Double, etc).
+Double, etc). I began this work as part of the "specialized-numeric" Scala
+Incubator project.
 
 This package is a much-improved version. For one, it is way faster, thanks to
 Scala's specialization system, as well as restructuring and an optional
@@ -53,13 +54,13 @@ probably want to use EasyImplicits.
 ANNOYING PREDEF
 ===============
 
-One annoying thing you've probably noticed is line following line:
+You've may have noticed this ugly-looking import:
 
     import Predef.{any2stringadd => _, _}
 
 This is to work around a design problem in Scala. You may not always need to
 use this, but if you notice problems with + not working correctly you should
-add this top-level import.
+add this top-level import. Sorry! :(
 
 
 PROJECT STRUCTURE
@@ -67,14 +68,11 @@ PROJECT STRUCTURE
 
 Here is a list of the SBT projects:
 
-  * root:   contains the library code itself
-  * plugin: contains the compiler plugin code
+  * root:   contains the library code itself ("package" builds the library jar)
+  * plugin: contains the compiler plugin code ("package" builds the plugin jar)
   * perf:   contains the performance test
 
-You can use "projects" to view them, and "project XYZ" to switch to XYZ.
-Run 'package' in the root project to build the library jar, and in the plugin
-project to create the plugin jar.
-
+Use "projects" to view them, and "project XYZ" to switch to XYZ.
 
 USING THE PLUGIN
 ================
@@ -152,8 +150,8 @@ instead provides a getOrdering() method (which builds a separate Ordering
 instance wrapping the Numeric instance). As a result, it doesn't perform any
 better than scala.math.Numeric on this test (and in fact does a bit worse).
 
-    I don't know how reasonable it is to specialize Ordering but huge performance
-gains seem possible.
+    I don't know how likely it is to that Ordering will be specialized but huge
+performance gains seem possible.
 
 4. scala.util.Sorting.quickSort lacks a direct Long implementation, so using it
 with Longs is ~5x slower than Int, Float or Double.
@@ -194,10 +192,16 @@ that Numeric can too.
 convert directly to/from any numeric type. This is useful since you might be
 going from a generic type to a known type (e.g. A -> Int) or a known type to a
 geneirc one (Int -> A). In both cases it is important not to do any unnecessary
-work (when A is an Int, this should not do any copying/casting).
+work (when A is an Int, you should not have to do any copying/casting).
 
-    These conversions can be used from the numeric object (e.g. numeric.fromInt(3))
-or directly on the values themselves (e.g. a.toBigInt).
+    These conversions can be used from the instance of Numeric[T] or directly
+on the values of T themselves:
+
+    def foo[T:Numeric](t:T):Double = {
+        val i:Int = numeric.toInt(t)
+        val d:Double = t.toDouble
+        d - i
+    }
 
 CAVEATS
 =======
@@ -240,7 +244,20 @@ similar to this:
     
     def handleA[@specialized A:Numeric:Manifest](a:A) = ...
 
-When you compare these visually the second is obviously terrible.
+When you compare these visually the second is obviously terrible. In many of
+the examples I have omitted the @specialized annotation for clarity. Hopefully
+this is not too deceptive.
+
+It would be great if there was some way to create a type bound that "included"
+specialization. So for instance, if someone used the SNumeric bound it would
+"include" @specialized(Int,Long,Float,Double), or something. The current design
+of specialization works well when a library author expects users to call her
+generic functions with concrete types. But if her users are themselves defining
+generic functions, the library author is powerless to help.
+
+Obviously, this could pose real problem in terms of bytecode explosion, which
+is why it should not be a default behavior. Numeric may be one of the few
+places where this behavior would be desirable.  
 
 Non-extensibility
 --------------------
@@ -260,4 +277,3 @@ Lack of range support
 I am still working on implementing a com.azave.math.NumericRange. For now
 you'll need to convert to a known type (e.g. Long), or use while loops. This
 is definitely possible and will hopefuly be done soon.
- 
