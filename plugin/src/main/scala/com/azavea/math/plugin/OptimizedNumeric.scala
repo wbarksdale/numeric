@@ -23,8 +23,8 @@ class OptimizedNumeric(val global: Global) extends Plugin {
 
 /**
  * This component turns things like:
- *   1. new NumericOps[T](m)(implicit ev).+(n)
- *   2. com.azavea.math.FastImplicits.infixNumericOps[T](m)(implicit ev).*(n)
+ *   1. new FastNumericOps[T](m)(implicit ev).+(n)
+ *   2. com.azavea.math.FastImplicits.infixOps[T](m)(implicit ev).*(n)
  *
  * Into:
  *   1. ev.plus(m, n)
@@ -46,45 +46,6 @@ with Transform with TypingTransformers with TreeDSL {
   )
 
   val binops = Map(
-    newTermName("compare") -> "compare",
-    newTermName("equiv") -> "equiv",
-    newTermName("max") -> "max",
-    newTermName("min") -> "min",
-
-    newTermName("$less$eq$greater") -> "compare",
-    newTermName("$div") -> "div",
-    newTermName("$eq$eq$eq") -> "equiv",
-    newTermName("$bang$eq$eq") -> "nequiv",
-    newTermName("$greater") -> "gt",
-    newTermName("$greater$eq") -> "gteq",
-    newTermName("$less") -> "lt",
-    newTermName("$less$eq") -> "lteq",
-    newTermName("$minus") -> "minus",
-    newTermName("$percent") -> "mod",
-    newTermName("$plus") -> "plus",
-    newTermName("$times") -> "times",
-    newTermName("$times$times") -> "pow"
-  )
-
-  val fuzzy_binops = Map(
-    newTermName("max_") -> "max",
-    newTermName("min_") -> "min",
-
-    newTermName("$less$eq$greater$tilde") -> "compare",
-    newTermName("$div$tilde") -> "div",
-    newTermName("$eq$eq$eq$tilde") -> "equiv",
-    newTermName("$bang$eq$eq$tilde") -> "nequiv",
-    newTermName("$greater$tilde") -> "gt",
-    newTermName("$greater$eq$tilde") -> "gteq",
-    newTermName("$less$tilde") -> "lt",
-    newTermName("$less$eq$tilde") -> "lteq",
-    newTermName("$minus$tilde") -> "minus",
-    newTermName("$percent$tilde") -> "mod",
-    newTermName("$plus$tilde") -> "plus",
-    newTermName("$times$tilde") -> "times",
-    newTermName("$times$times$tilde") -> "pow",
-
-    // xyz xyz
     newTermName("compare") -> "compare",
     newTermName("equiv") -> "equiv",
     newTermName("max") -> "max",
@@ -155,8 +116,8 @@ with Transform with TypingTransformers with TreeDSL {
             mylog("fuzzy alarm #1")
             tree
 
-          } else if (fuzzy_binops.contains(op)) {
-            val op2 = fuzzy_binops(op)
+          } else if (binops.contains(op)) {
+            val op2 = binops(op)
             val conv = getConverter(n.tpe)
             conv match {
               case Some(meth) => {
@@ -184,8 +145,8 @@ with Transform with TypingTransformers with TreeDSL {
             mylog("literal ops alarm #1")
             tree
         
-          } else if (fuzzy_binops.contains(op)) {
-            val op2 = fuzzy_binops(op)
+          } else if (binops.contains(op)) {
+            val op2 = binops(op)
             val conv = getConverter(m.tpe)
             conv match {
               case Some(meth) => {
@@ -220,7 +181,6 @@ with Transform with TypingTransformers with TreeDSL {
         }
 
         // match unary operators
-        //case Apply(Select(Apply(Apply(_, List(m)), List(ev)), op), Nil) => {
         case Select(Apply(Apply(_, List(m)), List(ev)), op) => {
           if (!isNumeric(ev.tpe)) {
             unit.warning(tree.pos, "unop false alarm #1")

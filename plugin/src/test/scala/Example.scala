@@ -1,7 +1,7 @@
 import com.azavea.math.Numeric
 
-import com.azavea.math.FastImplicits._
-//import com.azavea.math.EasyImplicits._
+//import com.azavea.math.FastImplicits._
+import com.azavea.math.EasyImplicits._
 import Predef.{any2stringadd => _, _}
 
 object Example {
