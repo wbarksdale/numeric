@@ -19,27 +19,27 @@ EXAMPLES
 
 Basic example of addition:
 
-> import com.azavea.math.Numeric
-> import com.azavea.math.FastImplicits._
->
-> def adder[A:Numeric](a:A, b:A) = a + b
+    import com.azavea.math.Numeric
+    import com.azavea.math.FastImplicits._
+    
+    def adder[A:Numeric](a:A, b:A) = a + b
 
 Creating a Point3 object with coordinates can have any numeric type:
 
-> import com.azavea.math.Numeric
-> import com.azavea.math.FastImplicits._
->
-> case class Point3[T:Numeric](x:T, y:T, z:T) {
->   def +(rhs:Point3[T]) = Point(x + rhs.x, y + rhs.y, z + rhs.z)
-> }
+    import com.azavea.math.Numeric
+    import com.azavea.math.FastImplicits._
+    
+    case class Point3[T:Numeric](x:T, y:T, z:T) {
+      def +(rhs:Point3[T]) = Point(x + rhs.x, y + rhs.y, z + rhs.z)
+    }
 
 Mixing literals and variables:
 
-> import com.azavea.math.Numeric
-> import com.azavea.math.EasyImplicits._
-> import Predef.{any2stringadd => _, _}
->
-> def foo[T:Numeric](a:T, b:T):T = a * 100 + b
+    import com.azavea.math.Numeric
+    import com.azavea.math.EasyImplicits._
+    import Predef.{any2stringadd => _, _}
+    
+    def foo[T:Numeric](a:T, b:T):T = a * 100 + b
 
 Currently there are two different ways to use Numeric: EasyImplicits allows you
 to operate on mixed numeric types (e.g. T + U + Int). FastImplicits sacrifices
@@ -55,7 +55,7 @@ ANNOYING PREDEF
 
 One annoying thing you've probably noticed is line following line:
 
-> import Predef.{any2stringadd => _, _}
+    import Predef.{any2stringadd => _, _}
 
 This is to work around a design problem in Scala. You may not always need to
 use this, but if you notice problems with + not working correctly you should
@@ -124,7 +124,8 @@ the direct implementation.
 
 It also creates a benchmark.html file which colors the output.
 
-=== RESULTS ===
+RESULTS
+=======
 
 There are some interesting results:
 
@@ -137,7 +138,7 @@ using infix operators without the compiler plugin. The current Numeric is
 clearly inappropriate for any application where performance is important.
 
 3. The asterisk (*) in the previous item has to do with Quicksort. Basically,
-scala.util.Sorting uses Ordering[A] which is not specialized and which
+scala.util.Sorting uses Ordering\[A\] which is not specialized and which
 implements all its own (non-specialized) comparison operators in terms of
 compare().
 
@@ -179,10 +180,13 @@ that Numeric can too.
 
 4. It adds some operators that I thought would be nice to have:
 
-  a. <=> as an alias for compare
-  b. === as an alias for equiv
-  c. !== as an alias for !equiv
-  d. ** as an alias for math.pow
+  1. <=> as an alias for compare
+
+  2. === as an alias for equiv
+
+  3. !== as an alias for !equiv
+
+  4. ** as an alias for math.pow
 
 5. It adds a full-suite of conversions. Unlike the existing Numeric, you can
 convert directly to/from any numeric type. This is useful since you might be
@@ -199,20 +203,20 @@ CAVEATS
 This section is just for "known problems" with the Numeric type class approach
 in Scala.
 
-1. Precision
+Precision
 ------------
 
 Given the signatures of Numeric's functions, it's possible to mix literals and
 generic types in a way which will lose precision. Consider:
 
-> def foo[T:Numeric](t:T) = t + 9.2
+    def foo[T:Numeric](t:T) = t + 9.2
 
-The author might expect that foo[Int](5) will return a Double (14.2), but in
-fact foo[T] returns T and so Foo[Int] will return Int (14). The solution in
+The author might expect that foo\[Int\](5) will return a Double (14.2), but in
+fact foo\[T\] returns T and so Foo\[Int\] will return Int (14). The solution in
 cases like this (if you know you want a double) is to convert T to Double
 first:
 
->  def foo[T:Numeric](t:T) = t.toDouble + 9.2
+     def foo[T:Numeric](t:T) = t.toDouble + 9.2
 
 You could imagine that + could "figure out" whether T has more precision than
 Double (e.g. BigDecimal) or less precisoin (e.g. Int) and "do the right thing".
@@ -222,7 +226,7 @@ If you are interested in implementing a numeric tower in Scala (presumably by
 writing some pretty intense compiler plugins if not modifying Scala's type
 system) please get in touch with the author. :) 
 
-2. Clunky syntax
+Clunky syntax
 ----------------
 
 Unfortunately in order to benefit from the speed of this library you must
@@ -230,13 +234,13 @@ annotate all your numeric with @specialization. Also, you often need a
 manifest, so you have to provide those too. Your code will end up looking
 similar to this:
 
-> def handleInt(a:Int) = ...
->
-> def handleA[@specialized A:Numeric:Manifest](a:A) = ...
+    def handleInt(a:Int) = ...
+    
+    def handleA[@specialized A:Numeric:Manifest](a:A) = ...
 
 When you compare these visually the second is obviously terrible.
 
-3. Non-extensibility
+Non-extensibility
 --------------------
 
 While you should be able to implement your own instances of Numeric for
@@ -248,7 +252,7 @@ This is unfortunate, and I'm is exploring a pluggable numeric conversion
 system which. However, in the interested of getting a fast, working
 implementation out there, I have shelved that for now.
 
-4. Lack of range support
+Lack of range support
 ------------------------
 
 I am still working on implementing a com.azave.math.NumericRange. For now
