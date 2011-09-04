@@ -12,24 +12,14 @@ import com.azavea.math.EasyImplicits._
 //import com.azavea.math.FastImplicits._
 import Predef.{any2stringadd => _, _}
 
-object Duh {
-  val s = "foo" + 3
-}
-
 // define some constant sizes and random arrays that we can use for our various
 // performance tests. if things run way too slow or way too fast you can try
-// changing the factor :)
+// changing the factor or divisor :)
 object Constant {
   val factor = 1
   val divisor = 1
 
-  val tinySize:Int = (10 * 1000 * factor) / divisor
-  val tinyIntArray = Array.ofDim[Int](tinySize).map(i => Random.nextInt())
-  val tinyLongArray = Array.ofDim[Long](tinySize).map(i => Random.nextLong())
-  val tinyFloatArray = Array.ofDim[Float](tinySize).map(i => Random.nextFloat())
-  val tinyDoubleArray = Array.ofDim[Double](tinySize).map(i => Random.nextDouble())
-
-  val smallSize:Int = (100 * 1000 * factor) / divisor
+  val smallSize:Int = (10 * 1000 * factor) / divisor
   val smallIntArray = Array.ofDim[Int](smallSize).map(i => Random.nextInt())
   val smallLongArray = Array.ofDim[Long](smallSize).map(i => Random.nextLong())
   val smallFloatArray = Array.ofDim[Float](smallSize).map(i => Random.nextFloat())
@@ -185,7 +175,6 @@ trait FromIntToX extends TestCase {
     var i = 0
     while (i < a.length) {
       b(i) = numeric.fromInt(a(i))
-      //b(i) = numeric.from[Int](a(i))
       i += 1
     }
     b
@@ -246,49 +235,85 @@ trait BaseAdder extends TestCase {
 
 trait BaseAdderInt extends BaseAdder {
   def direct() = {
-    var s:Int = 0; (0 until largeSize).foreach(i => s = directIntAdder(s, i)); Option(s)
+    var s = 0
+    var i = 0
+    while (i < largeSize) { s = directIntAdder(s, i); i += 1 }
+    Option(s)
   }
   def newGeneric() = {
-    var s:Int = 0; (0 until largeSize).foreach(i => s = newAdder(s, i)); Option(s)
+    var s = 0
+    var i = 0
+    while (i < largeSize) { s = newAdder(s, i); i += 1 }
+    Option(s)
   }
   def oldGeneric() = {
-    var s:Int = 0; (0 until largeSize).foreach(i => s = oldAdder(s, i)); Option(s)
+    var s = 0
+    var i = 0
+    while (i < largeSize) { s = oldAdder(s, i); i += 1 }
+    Option(s)
   }
 }
 
 trait BaseAdderLong extends BaseAdder {
   def direct() = {
-    var s:Long = 0L; (0 until largeSize).foreach(i => s = directLongAdder(s, i)); Option(s)
+    var s = 0L
+    var i = 0
+    while (i < largeSize) { s = directLongAdder(s, i); i += 1 }
+    Option(s)
   }
   def newGeneric() = {
-    var s:Long = 0L; (0 until largeSize).foreach(i => s = newAdder(s, i)); Option(s)
+    var s = 0L
+    var i = 0
+    while (i < largeSize) { s = newAdder(s, i); i += 1 }
+    Option(s)
   }
   def oldGeneric() = {
-    var s:Long = 0L; (0 until largeSize).foreach(i => s = oldAdder(s, i)); Option(s)
+    var s = 0L
+    var i = 0
+    while (i < largeSize) { s = oldAdder(s, i); i += 1 }
+    Option(s)
   }
 }
 
 trait BaseAdderFloat extends BaseAdder {
   def direct() = {
-    var s:Float = 0.0F; (0 until largeSize).foreach(i => s = directFloatAdder(s, i)); Option(s)
+    var s = 0.0F
+    var i = 0
+    while (i < largeSize) { s = directFloatAdder(s, i); i += 1 }
+    Option(s)
   }
   def newGeneric() = {
-    var s:Float = 0.0F; (0 until largeSize).foreach(i => s = newAdder(s, i)); Option(s)
+    var s = 0.0F
+    var i = 0
+    while (i < largeSize) { s = newAdder(s, i); i += 1 }
+    Option(s)
   }
   def oldGeneric() = {
-    var s:Float = 0.0F; (0 until largeSize).foreach(i => s = oldAdder(s, i)); Option(s)
+    var s = 0.0F
+    var i = 0
+    while (i < largeSize) { s = oldAdder(s, i); i += 1 }
+    Option(s)
   }
 }
 
 trait BaseAdderDouble extends BaseAdder {
   def direct() = {
-    var s:Double = 0.0; (0 until largeSize).foreach(i => s = directDoubleAdder(s, i)); Option(s)
+    var s = 0.0
+    var i = 0
+    while (i < largeSize) { s = directDoubleAdder(s, i); i += 1 }
+    Option(s)
   }
   def newGeneric() = {
-    var s:Double = 0.0; (0 until largeSize).foreach(i => s = newAdder(s, i)); Option(s)
+    var s = 0.0
+    var i = 0
+    while (i < largeSize) { s = newAdder(s, i); i += 1 }
+    Option(s)
   }
   def oldGeneric() = {
-    var s:Double = 0.0; (0 until largeSize).foreach(i => s = oldAdder(s, i)); Option(s)
+    var s = 0.0
+    var i = 0
+    while (i < largeSize) { s = oldAdder(s, i); i += 1 }
+    Option(s)
   }
 }
 
@@ -787,30 +812,30 @@ trait InsertionSort extends BaseSort {
 
 final class InsertionSortInt extends InsertionSort {
   def name = "insertion-sort-int"
-  def direct() = directInt(tinyIntArray)
-  def newGeneric() = newGenericSort(tinyIntArray)
-  def oldGeneric() = oldGenericSort(tinyIntArray)
+  def direct() = directInt(smallIntArray)
+  def newGeneric() = newGenericSort(smallIntArray)
+  def oldGeneric() = oldGenericSort(smallIntArray)
 }
 
 final class InsertionSortLong extends InsertionSort {
   def name = "insertion-sort-long"
-  def direct() = directLong(tinyLongArray)
-  def newGeneric() = newGenericSort(tinyLongArray)
-  def oldGeneric() = oldGenericSort(tinyLongArray)
+  def direct() = directLong(smallLongArray)
+  def newGeneric() = newGenericSort(smallLongArray)
+  def oldGeneric() = oldGenericSort(smallLongArray)
 }
 
 final class InsertionSortFloat extends InsertionSort {
   def name = "insertion-sort-float"
-  def direct() = directFloat(tinyFloatArray)
-  def newGeneric() = newGenericSort(tinyFloatArray)
-  def oldGeneric() = oldGenericSort(tinyFloatArray)
+  def direct() = directFloat(smallFloatArray)
+  def newGeneric() = newGenericSort(smallFloatArray)
+  def oldGeneric() = oldGenericSort(smallFloatArray)
 }
 
 final class InsertionSortDouble extends InsertionSort {
   def name = "insertion-sort-double"
-  def direct() = directDouble(tinyDoubleArray)
-  def newGeneric() = newGenericSort(tinyDoubleArray)
-  def oldGeneric() = oldGenericSort(tinyDoubleArray)
+  def direct() = directDouble(smallDoubleArray)
+  def newGeneric() = newGenericSort(smallDoubleArray)
+  def oldGeneric() = oldGenericSort(smallDoubleArray)
 }
 
 
@@ -1153,7 +1178,6 @@ final class IncrementInt2 extends TestCase {
     Some(total)
   }
 
-  //def newIncrement[@specialized A:Numeric](a:A):A = a +~ numeric.fromInt(100)
   def newIncrement[@specialized A:Numeric](a:A):A = a + numeric.fromInt(100)
   def newGeneric() = {
     var i = 0
@@ -1191,8 +1215,6 @@ final class IncrementInt3 extends TestCase {
     Some(total)
   }
 
-  //def newIncrement[@specialized A:Numeric](a:A):A = a + numeric.fromInt(100)
-  //def newIncrement[@specialized A:Numeric](a:A):A = a +~ 100
   def newIncrement[@specialized A:Numeric](a:A):A = a + 100
   def newGeneric() = {
     var i = 0
@@ -1230,7 +1252,6 @@ final class IncrementInt4 extends TestCase {
     Some(total)
   }
 
-  //def newIncrement[@specialized A:Numeric](a:A):A = 100 +~ a
   def newIncrement[@specialized A:Numeric](a:A):A = 100 + a
   def newGeneric() = {
     var i = 0
@@ -1261,6 +1282,11 @@ object Main {
                         new FromIntToFloat,
                         new FromIntToDouble),
                    
+                   List(new InfixAdderInt,
+                        new InfixAdderLong,
+                        new InfixAdderFloat,
+                        new InfixAdderDouble),
+                   
                    List(new AdderInt,
                         new AdderLong,
                         new AdderFloat,
@@ -1276,6 +1302,11 @@ object Main {
                         new FloatArrayRescale,
                         new DoubleArrayRescale),
                    
+                   List(new ArrayAllocatorInt,
+                        new ArrayAllocatorLong,
+                        new ArrayAllocatorFloat,
+                        new ArrayAllocatorDouble),
+                   
                    List(new FindMaxInt,
                         new FindMaxLong,
                         new FindMaxFloat,
@@ -1286,11 +1317,6 @@ object Main {
                         new QuicksortFloat,
                         new QuicksortDouble),
                    
-                   List(new ArrayAllocatorInt,
-                        new ArrayAllocatorLong,
-                        new ArrayAllocatorFloat,
-                        new ArrayAllocatorDouble),
-                   
                    List(new InsertionSortInt,
                         new InsertionSortLong,
                         new InsertionSortFloat,
@@ -1300,11 +1326,6 @@ object Main {
                         new MergeSortLong,
                         new MergeSortFloat,
                         new MergeSortDouble),
-                   
-                   List(new InfixAdderInt,
-                        new InfixAdderLong,
-                        new InfixAdderFloat,
-                        new InfixAdderDouble),
                    
                    List(new IncrementInt1,
                         new IncrementInt2,
