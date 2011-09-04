@@ -67,9 +67,9 @@ PROJECT STRUCTURE
 
 Here is a list of the SBT projects:
 
-  root:   contains the library code itself
-  plugin: contains the compiler plugin code
-  perf:   contains the performance test
+  * root:   contains the library code itself
+  * plugin: contains the compiler plugin code
+  * perf:   contains the performance test
 
 You can use "projects" to view them, and "project XYZ" to switch to XYZ.
 Run 'package' in the root project to build the library jar, and in the plugin
@@ -82,9 +82,14 @@ USING THE PLUGIN
 The optimized-numeric plugin is able to speed things up by rewring certain
 constructions into other, faster ones. Here's an example:
 
-  Written:     def foo[T:Numeric](a:T, b:T) = a + b
-  Compiled:    def foo[T](a:T, b:T)(implicit ev:Numeric[T]) = new FastNumericOps(a).+(b)
-  With-plugin: def foo[T](a:T, b:T)(implicit ev:Numeric[T]) = ev.add(a, b)
+    // written
+    def foo[T:Numeric](a:T, b:T) = a + b
+
+    // compiled
+    def foo[T](a:T, b:T)(implicit ev:Numeric[T]) = new FastNumericOps(a).+(b)
+
+    // compiled with plugin
+    def foo[T](a:T, b:T)(implicit ev:Numeric[T]) = ev.add(a, b)
 
 In the future scalac might be able to do this for us (or hotspot might be able
 to optimized it away). But in the absence of these things the plugin helps make
@@ -118,9 +123,9 @@ implementation (the built-in scala.math.Numeric). In some cases there is no old
 implementation--in those cases the test tries to hem as closely as possible to
 the direct implementation.
 
-  n:d is how new compares to direct
-  o:d is how old compares to direct
-  o:n is how old compares to new
+  * n:d is how new compares to direct
+  * o:d is how old compares to direct
+  * o:n is how old compares to new
 
 It also creates a benchmark.html file which colors the output.
 
@@ -142,12 +147,12 @@ scala.util.Sorting uses Ordering\[A\] which is not specialized and which
 implements all its own (non-specialized) comparison operators in terms of
 compare().
 
-This ends up being really slow, so my Numeric trait doesn't extend it, but
+    This ends up being really slow, so my Numeric trait doesn't extend it, but
 instead provides a getOrdering() method (which builds a separate Ordering
 instance wrapping the Numeric instance). As a result, it doesn't perform any
 better than scala.math.Numeric on this test (and in fact does a bit worse).
 
-I don't know how reasonable it is to specialize Ordering but huge performance
+    I don't know how reasonable it is to specialize Ordering but huge performance
 gains seem possible.
 
 4. scala.util.Sorting.quickSort lacks a direct Long implementation, so using it
@@ -180,13 +185,10 @@ that Numeric can too.
 
 4. It adds some operators that I thought would be nice to have:
 
-  1. <=> as an alias for compare
-
-  2. === as an alias for equiv
-
-  3. !== as an alias for !equiv
-
-  4. ** as an alias for math.pow
+  - <=> as an alias for compare
+  - === as an alias for equiv
+  - !== as an alias for !equiv
+  - ** as an alias for math.pow
 
 5. It adds a full-suite of conversions. Unlike the existing Numeric, you can
 convert directly to/from any numeric type. This is useful since you might be
@@ -194,7 +196,7 @@ going from a generic type to a known type (e.g. A -> Int) or a known type to a
 geneirc one (Int -> A). In both cases it is important not to do any unnecessary
 work (when A is an Int, this should not do any copying/casting).
 
-These conversions can be used from the numeric object (e.g. numeric.fromInt(3))
+    These conversions can be used from the numeric object (e.g. numeric.fromInt(3))
 or directly on the values themselves (e.g. a.toBigInt).
 
 CAVEATS
