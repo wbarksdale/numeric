@@ -1,7 +1,11 @@
 // project name
 name := "Optimized Numeric Plugin"
 
-sbtPlugin := true
+//sbtPlugin := true
+
+libraryDependencies <+= scalaVersion("org.scala-lang" % "scala-compiler" % _)
+
+resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
 
 // shrug?
 version := "0.1"
@@ -16,4 +20,4 @@ scalacOptions += "-optimise"
 //scalaVersion := "2.9.0-1"
 scalaVersion := "2.9.1"
 
-//crossScalaVersions := List("2.8.1", "2.9.0-1", "2.9.1")
+crossScalaVersions := List("2.8.1", "2.9.0-1", "2.9.1")
