@@ -8,8 +8,6 @@ import java.io.{FileWriter, PrintWriter}
 import Console.printf
 
 import com.azavea.math.Numeric
-//import com.azavea.math.Implicits._
-
 import com.azavea.math.EasyImplicits._
 //import com.azavea.math.FastImplicits._
 import Predef.{any2stringadd => _, _}
@@ -534,24 +532,10 @@ trait InfixAdder extends BaseAdder {
   }
 }
 
-trait InfixAdder2 extends BaseAdder {
-  //def newAdder[@specialized A:Numeric](a:A, b:A): A = a +~ b
-  def newAdder[@specialized A:Numeric](a:A, b:A): A = a + b
-  def oldAdder[A](a:A, b:A)(implicit m:OldNumeric[A]): A = {
-    import m._
-    a + b
-  }
-}
-
 final class InfixAdderInt extends InfixAdder with BaseAdderInt { def name = "infix-adder-int" }
 final class InfixAdderLong extends InfixAdder with BaseAdderLong { def name = "infix-adder-long" }
 final class InfixAdderFloat extends InfixAdder with BaseAdderFloat { def name = "infix-adder-float" }
 final class InfixAdderDouble extends InfixAdder with BaseAdderDouble{ def name = "infix-adder-double" }
-
-final class InfixAdder2Int extends InfixAdder2 with BaseAdderInt { def name = "infix-adder2-int" }
-final class InfixAdder2Long extends InfixAdder2 with BaseAdderLong { def name = "infix-adder2-long" }
-final class InfixAdder2Float extends InfixAdder2 with BaseAdderFloat { def name = "infix-adder2-float" }
-final class InfixAdder2Double extends InfixAdder2 with BaseAdderDouble{ def name = "infix-adder2-double" }
 
 // ==========================================================
 trait FindMax extends TestCase {
@@ -1277,55 +1261,50 @@ object Main {
                         new FromIntToFloat,
                         new FromIntToDouble),
                    
-                   // List(new AdderInt,
-                   //      new AdderLong,
-                   //      new AdderFloat,
-                   //      new AdderDouble),
+                   List(new AdderInt,
+                        new AdderLong,
+                        new AdderFloat,
+                        new AdderDouble),
                    
-                   // List(new IntArrayAdder,
-                   //      new LongArrayAdder,
-                   //      new FloatArrayAdder,
-                   //      new DoubleArrayAdder),
+                   List(new IntArrayAdder,
+                        new LongArrayAdder,
+                        new FloatArrayAdder,
+                        new DoubleArrayAdder),
                    
-                   // List(new IntArrayRescale,
-                   //      new LongArrayRescale,
-                   //      new FloatArrayRescale,
-                   //      new DoubleArrayRescale),
+                   List(new IntArrayRescale,
+                        new LongArrayRescale,
+                        new FloatArrayRescale,
+                        new DoubleArrayRescale),
                    
-                   // List(new FindMaxInt,
-                   //      new FindMaxLong,
-                   //      new FindMaxFloat,
-                   //      new FindMaxDouble),
+                   List(new FindMaxInt,
+                        new FindMaxLong,
+                        new FindMaxFloat,
+                        new FindMaxDouble),
                    
-                   // List(new QuicksortInt,
-                   //      new QuicksortLong,
-                   //      new QuicksortFloat,
-                   //      new QuicksortDouble),
+                   List(new QuicksortInt,
+                        new QuicksortLong,
+                        new QuicksortFloat,
+                        new QuicksortDouble),
                    
-                   // List(new ArrayAllocatorInt,
-                   //      new ArrayAllocatorLong,
-                   //      new ArrayAllocatorFloat,
-                   //      new ArrayAllocatorDouble),
+                   List(new ArrayAllocatorInt,
+                        new ArrayAllocatorLong,
+                        new ArrayAllocatorFloat,
+                        new ArrayAllocatorDouble),
                    
-                   // List(new InsertionSortInt,
-                   //      new InsertionSortLong,
-                   //      new InsertionSortFloat,
-                   //      new InsertionSortDouble),
+                   List(new InsertionSortInt,
+                        new InsertionSortLong,
+                        new InsertionSortFloat,
+                        new InsertionSortDouble),
                    
-                   // List(new MergeSortInt,
-                   //      new MergeSortLong,
-                   //      new MergeSortFloat,
-                   //      new MergeSortDouble),
+                   List(new MergeSortInt,
+                        new MergeSortLong,
+                        new MergeSortFloat,
+                        new MergeSortDouble),
                    
                    List(new InfixAdderInt,
                         new InfixAdderLong,
                         new InfixAdderFloat,
                         new InfixAdderDouble),
-                   
-                   List(new InfixAdder2Int,
-                        new InfixAdder2Long,
-                        new InfixAdder2Float,
-                        new InfixAdder2Double),
                    
                    List(new IncrementInt1,
                         new IncrementInt2,

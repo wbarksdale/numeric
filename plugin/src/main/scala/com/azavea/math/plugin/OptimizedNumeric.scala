@@ -24,7 +24,7 @@ class OptimizedNumeric(val global: Global) extends Plugin {
 /**
  * This component turns things like:
  *   1. new NumericOps[T](m)(implicit ev).+(n)
- *   2. com.azavea.math.Implicits.infixNumericOps[T](m)(implicit ev).*(n)
+ *   2. com.azavea.math.FastImplicits.infixNumericOps[T](m)(implicit ev).*(n)
  *
  * Into:
  *   1. ev.plus(m, n)
@@ -34,6 +34,9 @@ class RewriteInfixOps(plugin:Plugin, val global:Global) extends PluginComponent
 with Transform with TypingTransformers with TreeDSL {
   import global._
   import typer.typed
+
+  // set to true to print a warning for each transform
+  val debugging = true
 
   // TODO: maybe look up the definition of op and automatically figure mapping
   val unops = Map(
@@ -142,7 +145,7 @@ with Transform with TypingTransformers with TreeDSL {
   class MyTransformer(unit:CompilationUnit) extends TypingTransformer(unit) {
 
     override def transform(tree: Tree): Tree = {
-      def mylog(s:String) = if (true) unit.warning(tree.pos, s)
+      def mylog(s:String) = if (debugging) unit.warning(tree.pos, s)
 
       val tree2 = tree match {
 

@@ -400,26 +400,6 @@ object Numeric {
   def numeric[@specialized(Int, Long, Float, Double) A:Numeric]:Numeric[A] = implicitly[Numeric[A]]
 }
 
-/**
- * This object contains useful implicits to turn on infix operators
- * and other sugar.
- *
- * You can enable these via:
- *   import com.azavea.math.Implicits._
- */
-object Implicits {
-  implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new NumericOps(a)
-
-  implicit def infixIntOps(i:Int) = new IntOps(i)
-  implicit def infixLongOps(l:Long) = new LongOps(l)
-  implicit def infixFloatOps(f:Float) = new FloatOps(f)
-  implicit def infixDoubleOps(d:Double) = new DoubleOps(d)
-  implicit def infixBigIntOps(f:BigInt) = new BigIntOps(f)
-  implicit def infixBigDecimalOps(d:BigDecimal) = new BigDecimalOps(d)
-
-  def numeric[@specialized(Int, Long, Float, Double) A:Numeric]:Numeric[A] = implicitly[Numeric[A]]
-}
-
 object FastImplicits {
   implicit def infixNumericOps[@specialized(Int, Long, Float, Double) A:Numeric](a:A) = new FastNumericOps(a)
 

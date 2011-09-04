@@ -2,14 +2,14 @@ package com.azavea.math
 
 /**
  * @author Erik Osheim
- */
-
-/**
- * NumericOps adds things like inline operators to A. It's intended to
- * be used as an implicit decorator like so:
+ *
+ * NumericOps adds operators to A. It's intended to be used as an implicit
+ * decorator like so:
  *
  *   def foo[A:Numeric](a:A, b:A) = a + b
- *      (this is translated into) = new NumericOps(a).+(b)
+ * 
+ *   (compiled into) = new NumericOps(a).+(b)
+ *   (w/plugin into) = numeric.add(a, b)
  */
 final class EasyNumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A) {
   val n = implicitly[Numeric[A]]
@@ -36,7 +36,6 @@ final class EasyNumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lh
   def %[B:ConvertableFrom](rhs:B) = n.mod(lhs, n.fromType(rhs))
   def +[B:ConvertableFrom](rhs:B) = n.plus(lhs, n.fromType(rhs))
   def *[B:ConvertableFrom](rhs:B) = n.times(lhs, n.fromType(rhs))
-  def *~[B:ConvertableFrom](rhs:B) = n.times(lhs, n.fromType(rhs))
   def **[B:ConvertableFrom](rhs:B) = n.pow(lhs, n.fromType(rhs))
 
   def toByte = n.toByte(lhs)

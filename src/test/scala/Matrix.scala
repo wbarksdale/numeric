@@ -1,7 +1,6 @@
-package com.azavea.examples
-
 import com.azavea.math.Numeric
-import com.azavea.math.Implicits._
+import com.azavea.math.EasyImplicits._
+import Predef.{any2stringadd => _, _}
 
 class MatrixException(s:String) extends Exception
 
@@ -29,43 +28,43 @@ class NMatrix[A:Numeric:Manifest](val data:Array[Array[A]],
   }
 
   /* combine two matrices element-by-element */
-  def combine(other:NMatrix[A], f:(A, A) => A) = {
+  def combine(rhs:NMatrix[A], f:(A, A) => A) = {
     val result = createEmpty
     for (y <- 0 until rows; x <- 0 until cols) {
-      result(y, x) = f(this(y, x), other(y, x))
+      result(y, x) = f(this(y, x), rhs(y, x))
     }
     result
   }
 
   /* add a scalar value to each element */
-  def +(a:A):NMatrix[A] = map(_ +~ a)
+  def +(a:A):NMatrix[A] = map(_ + a)
 
   /* add two matrices */
-  def +(other:NMatrix[A]):NMatrix[A] = combine(other, _ +~ _)
+  def +(rhs:NMatrix[A]):NMatrix[A] = combine(rhs, _ + _)
 
   /* multiply each element by a scalar value */
-  def *(a:A):NMatrix[A] = map(_ *~ a)
+  def *(a:A):NMatrix[A] = map(_ * a)
   
   /* multiply two matrices */
-  def *(other:NMatrix[A]):NMatrix[A] = {
+  def *(rhs:NMatrix[A]):NMatrix[A] = {
 
-    /* make sure this and other are compatible */
-    if (this.rows != other.cols || this.cols != other.rows) {
+    /* make sure this and rhs are compatible */
+    if (this.rows != rhs.cols || this.cols != rhs.rows) {
       throw new MatrixException("dimensions do not match")
     }
 
     /* figure out the dimensions of the result matrix */
-    val (rrows, rcols, n) = (this.rows, other.cols, this.cols)
+    val (rrows, rcols, n) = (this.rows, rhs.cols, this.cols)
 
     /* allocate the result matrix */
     val result = NMatrix.empty[A](rows, rcols)
 
     /* loop over the cells in the result matrix */
     for(y <- 0 until rrows; x <- 0 until rcols) {
-      /* for each pair of values in this-row/other-column, multiply them
+      /* for each pair of values in this-row/rhs-column, multiply them
        * and then sum to get the result value for this cell. */
       result(y, x) = (0 until n).foldLeft(numeric.zero) {
-        case (sum, i) => sum +~ (this(y, i) *~ other(i, x))
+        case (sum, i) => sum + (this(y, i) * rhs(i, x))
       }
     }
     result
@@ -108,10 +107,10 @@ class DMatrix(val data:Array[Array[Double]], val rows:Int, val cols:Int) {
   }
 
   /* combine two matrices element-by-element */
-  def combine(other:DMatrix, f:(Double, Double) => Double) = {
+  def combine(rhs:DMatrix, f:(Double, Double) => Double) = {
     val result = createEmpty
     for (y <- 0 until rows; x <- 0 until cols) {
-      result(y, x) = f(this(y, x), other(y, x))
+      result(y, x) = f(this(y, x), rhs(y, x))
     }
     result
   }
@@ -120,26 +119,26 @@ class DMatrix(val data:Array[Array[Double]], val rows:Int, val cols:Int) {
   def +(a:Double) = map(_ + a)
 
   /* add two matrices */
-  def +(other:DMatrix) = combine(other, _ + _)
+  def +(rhs:DMatrix) = combine(rhs, _ + _)
 
   /* multiply each element by a scalar value */
   def *(a:Double) = map(_ * a)
   
   /* multiply two matrices */
-  def *(other:DMatrix) = {
+  def *(rhs:DMatrix) = {
 
-    /* make sure this and other are compatible */
-    if (this.rows != other.cols || this.cols != other.rows) {
+    /* make sure this and rhs are compatible */
+    if (this.rows != rhs.cols || this.cols != rhs.rows) {
       throw new MatrixException("dimensions do not match")
     }
 
-    val (rrows, rcols, n) = (this.rows, other.cols, this.cols)
+    val (rrows, rcols, n) = (this.rows, rhs.cols, this.cols)
 
     val result = DMatrix.empty(rrows, rcols)
 
     for(y <- 0 until rrows; x <- 0 until rcols) {
       result(y, x) = (0 until n).foldLeft(0.0) {
-        case (sum, i) => sum + (this(y, i) * other(i, x))
+        case (sum, i) => sum + (this(y, i) * rhs(i, x))
       }
     }
 
@@ -177,7 +176,7 @@ class MatrixSpec extends FunSuite with ShouldMatchers {
     println(m1.toAscii)
     println(m2.toAscii)
     for (y <- 0 until h; x <- 0 until w) {
-      if (m1(y, x) !==~ m2(y, x)) return false
+      if (m1(y, x) !== m2(y, x)) return false
     }
     true
   }
