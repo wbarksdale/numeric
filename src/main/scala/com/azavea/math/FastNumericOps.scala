@@ -30,6 +30,7 @@ final class FastNumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lh
   def >=(rhs:A) = n.gteq(lhs, rhs)
   def <(rhs:A) = n.lt(lhs, rhs)
   def <=(rhs:A) = n.lteq(lhs, rhs)
+  def /(rhs:A) = n.div(lhs, rhs)
   def -(rhs:A) = n.minus(lhs, rhs)
   def %(rhs:A) = n.mod(lhs, rhs)
   def +(rhs:A) = n.plus(lhs, rhs)
