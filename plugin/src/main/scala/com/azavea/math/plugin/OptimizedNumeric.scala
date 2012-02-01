@@ -36,7 +36,7 @@ with Transform with TypingTransformers with TreeDSL {
   import typer.typed
 
   // set to true to print a warning for each transform
-  val debugging = true
+  val debugging = false
 
   // TODO: maybe look up the definition of op and automatically figure mapping
   val unops = Map(
@@ -106,14 +106,15 @@ with Transform with TypingTransformers with TreeDSL {
   class MyTransformer(unit:CompilationUnit) extends TypingTransformer(unit) {
 
     override def transform(tree: Tree): Tree = {
-      def mylog(s:String) = if (debugging) unit.warning(tree.pos, s)
+      //def mylog(s:String) = if (debugging) unit.warning(tree.pos, s)
+      def mylog(s:String) = Unit
 
       val tree2 = tree match {
 
         // match fuzzy binary operators
         case Apply(Apply(TypeApply(Select(Apply(Apply(_, List(m)), List(ev)), op), List(tt)), List(n)), List(ev2)) => {
           if (!isNumeric(ev.tpe)) {
-            mylog("fuzzy alarm #1")
+            //mylog("fuzzy alarm #1")
             tree
 
           } else if (binops.contains(op)) {
@@ -121,20 +122,20 @@ with Transform with TypingTransformers with TreeDSL {
             val conv = getConverter(n.tpe)
             conv match {
               case Some(meth) => {
-                mylog("fuzzy transformed %s (with %s)".format(op, meth))
+                //mylog("fuzzy transformed %s (with %s)".format(op, meth))
                 typed { Apply(Select(ev, op2), List(m, Apply(Select(ev, meth), List(n)))) }
               }
               case None => if (equivalentTypes(m.tpe, n.tpe)) {
-                mylog("fuzzy transformed %s (removed conversion)".format(op))
+                //mylog("fuzzy transformed %s (removed conversion)".format(op))
                 typed { Apply(Select(ev, op2), List(m, n)) }
               } else {
-                mylog("fuzzy transformed %s".format(op))
+                //mylog("fuzzy transformed %s".format(op))
                 typed { Apply(Select(ev, op2), List(m, Apply(TypeApply(Select(ev, "fromType"), List(tt)), List(n)))) }
               }
             }
 
           } else {
-            mylog("fuzzy alarm #2")
+            //mylog("fuzzy alarm #2")
             tree
           }
         }
@@ -142,7 +143,7 @@ with Transform with TypingTransformers with TreeDSL {
         // match IntOps (and friends Float, Long, etc.)
         case Apply(Apply(TypeApply(Select(Apply(_, List(m)), op), List(tt)), List(n)), List(ev)) => {
           if (!isNumeric(ev.tpe)) {
-            mylog("literal ops alarm #1")
+            //mylog("literal ops alarm #1")
             tree
         
           } else if (binops.contains(op)) {
@@ -150,17 +151,17 @@ with Transform with TypingTransformers with TreeDSL {
             val conv = getConverter(m.tpe)
             conv match {
               case Some(meth) => {
-                mylog("zzz literal ops transformed %s (with %s)".format(op, meth))
+                //mylog("zzz literal ops transformed %s (with %s)".format(op, meth))
                 typed { Apply(Select(ev, op2), List(Apply(Select(ev, meth), List(m)), n)) }
               }
               case None => {
-                mylog("zzz literal ops transformed %s".format(op))
+                //mylog("zzz literal ops transformed %s".format(op))
                 typed { Apply(Select(ev, op2), List(Apply(TypeApply(Select(ev, "fromType"), List(tt)), List(m)), n)) }
               }
             }
         
           } else {
-            mylog("literal ops alarm #2")
+            //mylog("literal ops alarm #2")
             tree
           }
         }
@@ -172,7 +173,7 @@ with Transform with TypingTransformers with TreeDSL {
             tree
           } else if (binops.contains(op)) {
             val op2 = binops(op)
-            mylog("binop rewrote %s %s %s to n.%s(%s, %s)".format(m, op, n, op2, m, n))
+            //mylog("binop rewrote %s %s %s to n.%s(%s, %s)".format(m, op, n, op2, m, n))
             typed { Apply(Select(ev, op2), List(m, n)) }
           } else {
             unit.warning(tree.pos, "binop false alarm #2")
@@ -187,7 +188,7 @@ with Transform with TypingTransformers with TreeDSL {
             tree
           } else if (unops.contains(op)) {
             val op2 = unops(op)
-            mylog("unop rewrote %s to n.%s".format(op, op2))
+            //mylog("unop rewrote %s to n.%s".format(op, op2))
             typed { Apply(Select(ev, op2), List(m)) }
           } else {
             unit.warning(tree.pos, "unop false alarm #2")
