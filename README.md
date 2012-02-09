@@ -14,6 +14,11 @@ ugly casting.
 
 Ultimately my hope is to push these changes back into Scala's library.
 
+REQUIREMENTS
+============
+
+Build using SBT 10. Will port to SBT 11 soon.
+
 
 EXAMPLES
 ========
