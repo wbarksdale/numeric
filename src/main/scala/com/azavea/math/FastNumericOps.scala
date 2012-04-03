@@ -4,6 +4,8 @@ package com.azavea.math
  * @author Erik Osheim
  */
 
+import scala.{specialized => spec}
+
 /**
  * NumericOps adds things like inline operators to A. It's intended to
  * be used as an implicit decorator like so:
@@ -11,7 +13,7 @@ package com.azavea.math
  *   def foo[A:Numeric](a:A, b:A) = a + b
  *      (this is translated into) = new NumericOps(a).+(b)
  */
-final class FastNumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A) {
+final class FastNumericOps[@spec(Int,Long,Float,Double) A:Numeric](val lhs:A) {
   val n = implicitly[Numeric[A]]
 
   def abs = n.abs(lhs)

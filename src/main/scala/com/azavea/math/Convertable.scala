@@ -14,13 +14,15 @@ package com.azavea.math
  * trait, we'd have circular type definitions when compiling Numeric.
  */
 
+import scala.{specialized => spec}
+
 /**
  * Conversions to type.
  *
  * An object implementing ConvertableTo[A] provides methods to go
  * from number types to A.
  */
-trait ConvertableTo[@specialized A] {
+trait ConvertableTo[@spec A] {
   implicit def fromByte(a:Byte): A
   implicit def fromShort(a:Short): A
   implicit def fromInt(a:Int): A
@@ -137,7 +139,7 @@ object ConvertableTo {
  * An object implementing ConvertableFrom[A] provides methods to go
  * from A to number types (and String).
  */
-trait ConvertableFrom[@specialized A] {
+trait ConvertableFrom[@spec A] {
   implicit def toByte(a:A): Byte
   implicit def toShort(a:A): Short
   implicit def toInt(a:A): Int

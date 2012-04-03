@@ -1,5 +1,7 @@
 package com.azavea.math
 
+import scala.{specialized => spec}
+
 /**
  * @author Erik Osheim
  *
@@ -11,7 +13,7 @@ package com.azavea.math
  *   (compiled into) = new NumericOps(a).+(b)
  *   (w/plugin into) = numeric.add(a, b)
  */
-final class EasyNumericOps[@specialized(Int,Long,Float,Double) A:Numeric](val lhs:A) {
+final class EasyNumericOps[@spec(Int,Long,Float,Double) A:Numeric](val lhs:A) {
   val n = implicitly[Numeric[A]]
 
   def abs = n.abs(lhs)
