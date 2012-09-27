@@ -5,7 +5,7 @@ name := "Numeric Performance Test"
 version := "0.1"
 
 // hide backup files
-defaultExcludes ~= (filter => filter || "*~")
+//defaultExcludes ~= (filter => filter || "*~")
 
 scalacOptions += "-optimise"
 
