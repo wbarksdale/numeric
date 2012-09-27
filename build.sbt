@@ -8,7 +8,7 @@ version := "0.1"
 libraryDependencies += "org.scalatest" % "scalatest_2.9.0" % "1.6.1"
 
 // hide backup files
-defaultExcludes ~= (filter => filter || "*~")
+// defaultExcludes ~= (filter => filter || "*~")
 
 scalacOptions += "-optimise"
 
